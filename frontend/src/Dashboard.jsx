@@ -8,25 +8,25 @@ import {
   History,
   LogOut,
 } from "lucide-react";
+import Productos from "./Productos";
 
 function Dashboard({ setIsAuth }) {
   const [open, setOpen] = useState(false);
-  const [menu, setMenu] = useState("inicio");
+  const [menu, setMenu] = useState("principal");
   const [showLogout, setShowLogout] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
   const menus = [
-    { name: "inicio", label: "Dashboard", icon: <LayoutDashboard size={20} /> },
-    { name: "clientes", label: "Clientes", icon: <Users size={20} /> },
+    { name: "principal", label: "Principal", icon: <LayoutDashboard size={20} /> },
     { name: "productos", label: "Productos", icon: <Package size={20} /> },
+    { name: "clientes", label: "Clientes", icon: <Users size={20} /> },
     { name: "ventas", label: "Ventas", icon: <ShoppingCart size={20} /> },
     { name: "historial", label: "Historial", icon: <History size={20} /> },
   ];
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.clear();
     setIsAuth(false);
   };
 
@@ -34,47 +34,30 @@ function Dashboard({ setIsAuth }) {
     <div className="flex h-screen bg-gray-100">
 
       {/* SIDEBAR */}
-      <div
-        className={`bg-slate-900 text-white transition-all duration-300 ${
-          open ? "w-64" : "w-16"
-        } flex flex-col`}
-      >
-        {/* TOP */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-700">
-          {open && <span className="font-bold text-lg">Sistema</span>}
-          <Menu
-            className="cursor-pointer"
-            onClick={() => setOpen(!open)}
-          />
+      <div className={`bg-slate-900 text-white ${open ? "w-64" : "w-16"} transition-all flex flex-col`}>
+        <div className="flex justify-between p-4 border-b border-slate-700">
+          {open && <span>Sistema</span>}
+          <Menu onClick={() => setOpen(!open)} className="cursor-pointer" />
         </div>
 
-        {/* MENU */}
-        <div className="flex-1 mt-4 space-y-2">
+        <div className="flex-1 mt-4">
           {menus.map((item) => (
             <div
               key={item.name}
               onClick={() => setMenu(item.name)}
-              className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-all
-                ${
-                  menu === item.name
-                    ? "bg-blue-600"
-                    : "hover:bg-slate-700"
-                }`}
+              className={`flex items-center gap-3 px-4 py-3 cursor-pointer ${
+                menu === item.name ? "bg-blue-600" : "hover:bg-slate-700"
+              }`}
             >
               {item.icon}
-              {open && <span>{item.label}</span>}
+              {open && item.label}
             </div>
           ))}
         </div>
 
-        {/* LOGOUT */}
-        <div className="p-4 border-t border-slate-700">
-          <button
-            onClick={() => setShowLogout(true)}
-            className="flex items-center gap-3 w-full bg-red-600 hover:bg-red-700 p-3 rounded"
-          >
-            <LogOut size={20} />
-            {open && "Cerrar sesión"}
+        <div className="p-4">
+          <button onClick={() => setShowLogout(true)} className="bg-red-600 p-3 w-full rounded">
+            {open ? "Cerrar sesión" : <LogOut />}
           </button>
         </div>
       </div>
@@ -82,64 +65,35 @@ function Dashboard({ setIsAuth }) {
       {/* CONTENIDO */}
       <div className="flex-1 p-6">
 
-        {/* HEADER */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold">
-            Bienvenido {user?.name || "Usuario"}
-          </h1>
-        </div>
+        <h1 className="text-2xl font-bold mb-6">
+          {menu === "principal"
+            ? `Bienvenido ${user?.name}`
+            : menu.charAt(0).toUpperCase() + menu.slice(1)}
+        </h1>
 
-        {/* VISTAS */}
-        {menu === "inicio" && (
-          <div className="bg-white p-6 rounded-xl shadow">
-            Dashboard principal
+        {/* PRINCIPAL */}
+        {menu === "principal" && (
+          <div className="bg-white p-6 rounded shadow">
+            <h2 className="font-bold text-lg mb-4">Dashboard</h2>
           </div>
         )}
 
-        {menu === "clientes" && (
-          <div className="bg-white p-6 rounded-xl shadow">
-            Clientes
-          </div>
-        )}
+        {/* PRODUCTOS */}
+        {menu === "productos" && <Productos />}
 
-        {menu === "productos" && (
-          <div className="bg-white p-6 rounded-xl shadow">
-            Productos
-          </div>
-        )}
-
-        {menu === "ventas" && (
-          <div className="bg-white p-6 rounded-xl shadow">
-            Ventas
-          </div>
-        )}
-
-        {menu === "historial" && (
-          <div className="bg-white p-6 rounded-xl shadow">
-            Historial
-          </div>
-        )}
       </div>
 
-      {/* MODAL LOGOUT */}
+      {/* LOGOUT */}
       {showLogout && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-center">
-            <h2 className="text-lg font-semibold mb-4">
-              ¿Cerrar sesión?
-            </h2>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={() => setShowLogout(false)}
-                className="px-4 py-2 bg-gray-300 rounded"
-              >
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center">
+          <div className="bg-white p-6 rounded text-center">
+            <p className="mb-4">¿Cerrar sesión?</p>
+            <div className="flex gap-4 justify-center">
+              <button onClick={() => setShowLogout(false)} className="bg-gray-300 px-4 py-2 rounded">
                 Cancelar
               </button>
-              <button
-                onClick={logout}
-                className="px-4 py-2 bg-red-600 text-white rounded"
-              >
-                Sí, salir
+              <button onClick={logout} className="bg-red-600 text-white px-4 py-2 rounded">
+                Salir
               </button>
             </div>
           </div>

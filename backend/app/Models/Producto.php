@@ -9,11 +9,16 @@ class Producto extends Model
     protected $fillable = [
         'nombre',
         'precio',
-        'stock'
+        'stock',
+        'tipo',
+        'espesor',
+        'canto_tipo',
+        'canto_ancho',
+        'color',
     ];
 
- public function detalles()
-{
-    return $this->hasMany(DetalleVenta::class);
-}
+    protected $casts = [
+        'precio' => 'decimal:2',
+        'stock' => 'integer',
+    ];
 }
