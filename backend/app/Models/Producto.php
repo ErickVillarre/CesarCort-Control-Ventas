@@ -21,4 +21,9 @@ class Producto extends Model
         'precio' => 'decimal:2',
         'stock' => 'integer',
     ];
+
+    public function detalles()
+    {
+        return $this->hasMany(DetalleVenta::class);
+    }
 }

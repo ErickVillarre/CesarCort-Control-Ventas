@@ -11,7 +11,13 @@ class DetalleVenta extends Model
         'producto_id',
         'cantidad',
         'precio',
-        'subtotal'
+        'subtotal',
+    ];
+
+    protected $casts = [
+        'cantidad' => 'integer',
+        'precio' => 'decimal:2',
+        'subtotal' => 'decimal:2',
     ];
 
     public function producto()
@@ -21,6 +27,6 @@ class DetalleVenta extends Model
 
     public function venta()
     {
-    return $this->belongsTo(Venta::class);
+        return $this->belongsTo(Venta::class);
     }
 }

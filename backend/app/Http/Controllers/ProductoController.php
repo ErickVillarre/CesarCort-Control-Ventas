@@ -9,11 +9,6 @@ use Illuminate\Validation\Rule;
 
 class ProductoController extends Controller
 {
-    private function tiposPermitidos(): array
-    {
-        return ['melamina', 'canto', 'accesorio', 'servicio', 'medelack'];
-    }
-
     private function validarAdmin()
     {
         $user = Auth::user();
@@ -46,58 +41,22 @@ class ProductoController extends Controller
         };
     }
 
-    private function validarCamposPorTipo(Request $request)
-    {
-        $tipo = $request->tipo;
-
-        if ($tipo !== 'medelack' && blank(trim((string) $request->nombre))) {
-            return response()->json([
-                'message' => 'Ingrese nombre'
-            ], 422);
-        }
-
-        if ($tipo === 'melamina' && blank(trim((string) $request->espesor))) {
-            return response()->json([
-                'message' => 'Seleccione el espesor'
-            ], 422);
-        }
-
-        if ($tipo === 'canto') {
-            if (blank(trim((string) $request->canto_tipo)) || blank(trim((string) $request->canto_ancho))) {
-                return response()->json([
-                    'message' => 'Complete tipo y medida del canto'
-                ], 422);
-            }
-        }
-
-        if ($tipo === 'medelack' && blank(trim((string) $request->color))) {
-            return response()->json([
-                'message' => 'Ingrese color'
-            ], 422);
-        }
-
-        if ($tipo === 'servicio' && blank(trim((string) $request->nombre))) {
-            return response()->json([
-                'message' => 'Ingrese nombre del servicio'
-            ], 422);
-        }
-
-        return null;
-    }
-
     public function index()
     {
         return Producto::latest()->get();
     }
 
+    public function show(Producto $producto)
+    {
+        return response()->json($producto);
+    }
+
     public function store(Request $request)
     {
-        if ($resp = $this->validarAdmin()) {
-            return $resp;
-        }
+        if ($resp = $this->validarAdmin()) return $resp;
 
         $request->validate([
-            'tipo' => ['required', Rule::in($this->tiposPermitidos())],
+            'tipo' => ['required', Rule::in(['melamina', 'canto', 'accesorio', 'servicio', 'medelack'])],
             'nombre' => ['nullable', 'string', 'max:255'],
             'precio' => ['required', 'numeric', 'min:0'],
             'stock' => ['nullable', 'integer', 'min:0'],
@@ -107,14 +66,9 @@ class ProductoController extends Controller
             'color' => ['nullable', 'string', 'max:255'],
         ]);
 
-        if ($resp = $this->validarCamposPorTipo($request)) {
-            return $resp;
-        }
-
         $nombreFinal = $this->construirNombre($request);
 
-        $yaExiste = Producto::where('nombre', $nombreFinal)->exists();
-        if ($yaExiste) {
+        if (Producto::where('nombre', $nombreFinal)->exists()) {
             return response()->json([
                 'message' => 'Ya existe un producto con ese nombre'
             ], 422);
@@ -136,20 +90,16 @@ class ProductoController extends Controller
 
     public function update(Request $request, $id)
     {
-        if ($resp = $this->validarAdmin()) {
-            return $resp;
-        }
+        if ($resp = $this->validarAdmin()) return $resp;
 
         $producto = Producto::find($id);
 
         if (!$producto) {
-            return response()->json([
-                'message' => 'Producto no encontrado'
-            ], 404);
+            return response()->json(['message' => 'Producto no encontrado'], 404);
         }
 
         $request->validate([
-            'tipo' => ['required', Rule::in($this->tiposPermitidos())],
+            'tipo' => ['required', Rule::in(['melamina', 'canto', 'accesorio', 'servicio', 'medelack'])],
             'nombre' => ['nullable', 'string', 'max:255'],
             'precio' => ['required', 'numeric', 'min:0'],
             'stock' => ['nullable', 'integer', 'min:0'],
@@ -159,17 +109,13 @@ class ProductoController extends Controller
             'color' => ['nullable', 'string', 'max:255'],
         ]);
 
-        if ($resp = $this->validarCamposPorTipo($request)) {
-            return $resp;
-        }
-
         $nombreFinal = $this->construirNombre($request);
 
-        $yaExiste = Producto::where('nombre', $nombreFinal)
-            ->where('id', '!=', $producto->id)
-            ->exists();
-
-        if ($yaExiste) {
+        if (
+            Producto::where('nombre', $nombreFinal)
+                ->where('id', '!=', $producto->id)
+                ->exists()
+        ) {
             return response()->json([
                 'message' => 'Ya existe un producto con ese nombre'
             ], 422);
@@ -191,22 +137,40 @@ class ProductoController extends Controller
 
     public function destroy($id)
     {
-        if ($resp = $this->validarAdmin()) {
-            return $resp;
-        }
+        if ($resp = $this->validarAdmin()) return $resp;
 
         $producto = Producto::find($id);
 
         if (!$producto) {
-            return response()->json([
-                'message' => 'Producto no encontrado'
-            ], 404);
+            return response()->json(['message' => 'Producto no encontrado'], 404);
         }
 
         $producto->delete();
 
-        return response()->json([
-            'message' => 'Producto eliminado correctamente'
-        ]);
+        return response()->json(['message' => 'Producto eliminado correctamente']);
+    }
+
+    public function buscar(Request $request)
+    {
+        $q = trim((string) $request->get('q', $request->get('nombre', '')));
+
+        return response()->json(
+            Producto::where('nombre', 'like', "%{$q}%")
+                ->orderBy('nombre')
+                ->limit(20)
+                ->get()
+        );
+    }
+
+    public function autocomplete(Request $request)
+    {
+        $q = trim((string) $request->get('q', $request->get('term', '')));
+
+        return response()->json(
+            Producto::where('nombre', 'like', "%{$q}%")
+                ->orderBy('nombre')
+                ->limit(10)
+                ->get()
+        );
     }
 }
