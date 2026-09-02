@@ -1,0 +1,44 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: ventas_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ventas_melamina
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "laravel", "-psecret"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ventas_app
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    working_dir: /var/www/html
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env.docker
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: ventas_melamina
+      DB_USERNAME: laravel
+      DB_PASSWORD: secret
+      LARAVEL_ENV: production
+
+volumes:
+  mysql_data:
