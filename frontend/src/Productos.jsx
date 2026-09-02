@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from "react";
 import api from "./api/axios";
 import toast from "react-hot-toast";
@@ -89,6 +90,10 @@ const prepararEdicion = (producto) => {
 
 export default function Productos() {
   const user = JSON.parse(localStorage.getItem("user") || "null");
+  const permissions = user?.permissions || [];
+  const canCreate = permissions.includes("*") || permissions.includes("productos.crear");
+  const canEdit = permissions.includes("*") || permissions.includes("productos.editar");
+  const canDelete = permissions.includes("*") || permissions.includes("productos.desactivar");
 
   const [productos, setProductos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
@@ -113,7 +118,7 @@ export default function Productos() {
   };
 
   const abrirNuevo = () => {
-    if (user?.rol !== "admin") {
+    if (!canCreate) {
       toast.error("Solo el administrador puede crear");
       return;
     }
@@ -230,7 +235,7 @@ export default function Productos() {
   };
 
   const editar = (p) => {
-    if (user?.rol !== "admin") {
+    if (!canEdit) {
       toast.error("Solo el administrador puede editar");
       return;
     }
@@ -247,7 +252,7 @@ export default function Productos() {
       setShowDelete(false);
       setProductoEliminar(null);
       obtenerProductos();
-    } catch (error) {
+    } catch {
       toast.error("Solo el administrador puede eliminar");
     }
   };
@@ -281,13 +286,15 @@ export default function Productos() {
           onChange={(e) => setBusqueda(e.target.value)}
         />
 
-        <button
-          onClick={abrirNuevo}
-          className="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded"
-          title="Nuevo producto"
-        >
-          <Plus />
-        </button>
+        {canCreate && (
+          <button
+            onClick={abrirNuevo}
+            className="bg-zinc-900 hover:bg-zinc-700 text-white px-4 py-2 rounded"
+            title="Nuevo producto"
+          >
+            <Plus />
+          </button>
+        )}
       </div>
 
       <div className="bg-white rounded shadow max-h-[500px] overflow-y-auto">
@@ -308,24 +315,24 @@ export default function Productos() {
                 <td className="p-2">S/ {p.precio}</td>
                 <td className="p-2">{p.stock}</td>
                 <td className="p-2 flex gap-2">
-                  <button type="button" onClick={() => editar(p)} title="Editar">
-                    <Pencil size={18} color="#eab308" />
-                  </button>
+                  {canEdit && (
+                    <button type="button" onClick={() => editar(p)} title="Editar">
+                      <Pencil size={18} color="#52525B" />
+                    </button>
+                  )}
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (user?.rol !== "admin") {
-                        toast.error("Solo el administrador puede eliminar");
-                        return;
-                      }
-                      setProductoEliminar(p);
-                      setShowDelete(true);
-                    }}
-                    title="Eliminar"
-                  >
-                    <Trash2 size={18} color="red" />
-                  </button>
+                  {canDelete && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProductoEliminar(p);
+                        setShowDelete(true);
+                      }}
+                      title="Eliminar"
+                    >
+                      <Trash2 size={18} color="#DC2626" />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -507,7 +514,7 @@ export default function Productos() {
 
               <button
                 type="submit"
-                className="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded"
+                className="bg-zinc-900 hover:bg-zinc-700 text-white px-3 py-1 rounded"
               >
                 Guardar
               </button>

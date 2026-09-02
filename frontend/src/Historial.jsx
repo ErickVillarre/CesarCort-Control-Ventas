@@ -1,86 +1,86 @@
+/* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import api from "./api/axios";
-import { CalendarDays, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import toast from "react-hot-toast";
 
+const today = new Date().toISOString().split("T")[0];
+
 export default function Historial() {
-  const [fecha, setFecha] = useState(new Date().toISOString().split("T")[0]);
+  const [filters, setFilters] = useState({ desde: today, hasta: today, cliente_id: "", vendedor_id: "", comprobante_tipo: "", metodo_pago: "" });
+  const [summary, setSummary] = useState(null);
   const [ventas, setVentas] = useState([]);
-  const [totalDia, setTotalDia] = useState(0);
-  const [cantidadVentas, setCantidadVentas] = useState(0);
   const [abiertos, setAbiertos] = useState({});
 
-  const cargar = async (f = fecha) => {
+  const cargar = async () => {
     try {
-      const res = await api.get("/ventas/historial", { params: { fecha: f } });
+      const res = await api.get("/ventas/historial", { params: filters });
+      setSummary(res.data);
       setVentas(res.data.ventas || []);
-      setTotalDia(res.data.total_dia || 0);
-      setCantidadVentas(res.data.cantidad_ventas || 0);
-    } catch {
-      toast.error("No se pudo cargar el historial");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "No se pudo cargar el historial");
     }
   };
 
   useEffect(() => {
-    cargar(fecha);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    cargar();
   }, []);
 
-  const toggle = (id) => {
-    setAbiertos((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  const setFilter = (field, value) => setFilters((current) => ({ ...current, [field]: value }));
+  const toggle = (id) => setAbiertos((prev) => ({ ...prev, [id]: !prev[id] }));
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow p-5">
-        <h2 className="text-xl font-bold mb-4">Historial de ventas</h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-gray-50 rounded-lg p-4">
-            <p className="text-sm text-gray-500">Fecha</p>
-            <input
-              type="date"
-              value={fecha}
-              min={new Date().toISOString().split("T")[0]}
-              onChange={(e) => {
-                setFecha(e.target.value);
-                cargar(e.target.value);
-              }}
-              className="mt-2 w-full border rounded-lg px-3 py-2"
-            />
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-4">
-            <p className="text-sm text-gray-500">Ventas del día</p>
-            <p className="text-2xl font-bold mt-2">{cantidadVentas}</p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-4">
-            <p className="text-sm text-gray-500">Total vendido</p>
-            <p className="text-2xl font-bold mt-2">S/ {Number(totalDia).toFixed(2)}</p>
-          </div>
+    <div className="space-y-5">
+      <section className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
+        <h2 className="text-xl font-semibold">Historial de ventas</h2>
+        <div className="mt-4 grid gap-3 md:grid-cols-6">
+          <input type="date" max={today} value={filters.desde} onChange={(e) => setFilter("desde", e.target.value)} className="rounded border border-zinc-300 px-3 py-2" />
+          <input type="date" max={today} value={filters.hasta} onChange={(e) => setFilter("hasta", e.target.value)} className="rounded border border-zinc-300 px-3 py-2" />
+          <input value={filters.cliente_id} onChange={(e) => setFilter("cliente_id", e.target.value)} className="rounded border border-zinc-300 px-3 py-2" placeholder="ID cliente" />
+          <input value={filters.vendedor_id} onChange={(e) => setFilter("vendedor_id", e.target.value)} className="rounded border border-zinc-300 px-3 py-2" placeholder="ID vendedor" />
+          <select value={filters.comprobante_tipo} onChange={(e) => setFilter("comprobante_tipo", e.target.value)} className="rounded border border-zinc-300 px-3 py-2">
+            <option value="">Comprobante</option><option value="boleta">Boleta</option><option value="factura">Factura</option><option value="interno">Interno</option>
+          </select>
+          <button onClick={cargar} className="rounded bg-zinc-900 px-4 py-2 text-white">Consultar</button>
         </div>
-      </div>
+      </section>
 
-      <div className="space-y-3">
+      <section className="grid gap-3 md:grid-cols-4 xl:grid-cols-6">
+        {[
+          ["Ventas", summary?.cantidad_ventas],
+          ["Subtotal", summary?.subtotal],
+          ["Descuentos", summary?.descuentos],
+          ["Total", summary?.total_dia],
+          ["Pendientes", summary?.operaciones_pendientes],
+          ["Anuladas", summary?.ventas_anuladas],
+        ].map(([label, value]) => (
+          <div key={label} className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
+            <p className="text-xs uppercase text-zinc-500">{label}</p>
+            <p className="mt-2 text-2xl font-semibold">{Number(value || 0).toFixed(["Subtotal", "Descuentos", "Total"].includes(label) ? 2 : 0)}</p>
+          </div>
+        ))}
+      </section>
+
+      <section className="grid gap-3 md:grid-cols-6">
+        {["efectivo", "yape", "transferencia", "tarjeta", "credito", "dinero_cuenta"].map((key) => (
+          <div key={key} className="rounded border border-zinc-200 bg-zinc-50 p-3 text-sm">
+            <p className="text-zinc-500">{key.replace("_", " ")}</p>
+            <p className="font-semibold">S/ {Number(summary?.[key] || 0).toFixed(2)}</p>
+          </div>
+        ))}
+      </section>
+
+      <section className="space-y-3">
         {ventas.map((v) => {
           const abierto = !!abiertos[v.id];
 
           return (
-            <div key={v.id} className="bg-white rounded-xl shadow overflow-hidden">
-              <button
-                onClick={() => toggle(v.id)}
-                className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50"
-              >
+            <div key={v.id} className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
+              <button onClick={() => toggle(v.id)} className="flex w-full items-center justify-between px-5 py-4 text-left hover:bg-zinc-50">
                 <div>
-                  <h3 className="font-semibold">
-                    {v.cliente?.nombre || "Cliente Anónimo"}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    {new Date(v.created_at).toLocaleString("es-PE")}
-                  </p>
+                  <h3 className="font-semibold">{v.cliente?.nombre || "Cliente anonimo"}</h3>
+                  <p className="text-sm text-zinc-500">{new Date(v.created_at).toLocaleString("es-PE")} - {v.vendedor?.name || "Sin vendedor"}</p>
                 </div>
-
                 <div className="flex items-center gap-4">
                   <span className="font-bold">S/ {Number(v.total).toFixed(2)}</span>
                   {abierto ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -89,19 +89,11 @@ export default function Historial() {
 
               {abierto && (
                 <div className="px-5 pb-5">
-                  <div className="overflow-x-auto border rounded-lg">
+                  <div className="overflow-x-auto rounded border border-zinc-200">
                     <table className="w-full text-sm">
-                      <thead className="bg-gray-100">
-                        <tr>
-                          <th className="p-2 text-left">Producto</th>
-                          <th className="p-2 text-left">Cantidad</th>
-                          <th className="p-2 text-left">Precio</th>
-                          <th className="p-2 text-left">Subtotal</th>
-                        </tr>
-                      </thead>
                       <tbody>
                         {v.detalles?.map((d) => (
-                          <tr key={d.id} className="border-t">
+                          <tr key={d.id} className="border-b border-zinc-100 last:border-0">
                             <td className="p-2">{d.producto?.nombre}</td>
                             <td className="p-2">{d.cantidad}</td>
                             <td className="p-2">S/ {Number(d.precio).toFixed(2)}</td>
@@ -111,31 +103,12 @@ export default function Historial() {
                       </tbody>
                     </table>
                   </div>
-
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <p className="text-gray-500">Subtotal</p>
-                      <p className="font-semibold">S/ {Number(v.subtotal).toFixed(2)}</p>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <p className="text-gray-500">IGV</p>
-                      <p className="font-semibold">S/ {Number(v.igv).toFixed(2)}</p>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <p className="text-gray-500">Método</p>
-                      <p className="font-semibold">{v.metodo_pago}</p>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <p className="text-gray-500">Operación</p>
-                      <p className="font-semibold">{v.tipo_operacion}</p>
-                    </div>
-                  </div>
                 </div>
               )}
             </div>
           );
         })}
-      </div>
+      </section>
     </div>
   );
 }

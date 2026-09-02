@@ -13,9 +13,9 @@ class ProductoController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user || $user->rol !== 'admin') {
+        if (!$user || !$user->hasPermission('productos.gestionar')) {
             return response()->json([
-                'message' => 'Solo el administrador puede realizar esta acción'
+                'message' => 'No tienes permiso para gestionar productos'
             ], 403);
         }
 
@@ -53,12 +53,13 @@ class ProductoController extends Controller
 
     public function store(Request $request)
     {
-        if ($resp = $this->validarAdmin()) return $resp;
-
         $request->validate([
             'tipo' => ['required', Rule::in(['melamina', 'canto', 'accesorio', 'servicio', 'medelack'])],
             'nombre' => ['nullable', 'string', 'max:255'],
+            'codigo' => ['nullable', 'string', 'max:100', 'unique:productos,codigo'],
+            'codigo_barras' => ['nullable', 'string', 'max:100', 'unique:productos,codigo_barras'],
             'precio' => ['required', 'numeric', 'min:0'],
+            'costo' => ['nullable', 'numeric', 'min:0'],
             'stock' => ['nullable', 'integer', 'min:0'],
             'espesor' => ['nullable', Rule::in(['18mm', '15mm'])],
             'canto_tipo' => ['nullable', Rule::in(['grueso', 'delgado'])],
@@ -76,7 +77,10 @@ class ProductoController extends Controller
 
         $producto = Producto::create([
             'nombre' => $nombreFinal,
+            'codigo' => $request->codigo,
+            'codigo_barras' => $request->codigo_barras,
             'precio' => $request->precio,
+            'costo' => $request->costo,
             'stock' => $request->tipo === 'servicio' ? 0 : (int) $request->stock,
             'tipo' => $request->tipo,
             'espesor' => $request->tipo === 'melamina' ? ($request->espesor ?: '18mm') : null,
@@ -90,8 +94,6 @@ class ProductoController extends Controller
 
     public function update(Request $request, $id)
     {
-        if ($resp = $this->validarAdmin()) return $resp;
-
         $producto = Producto::find($id);
 
         if (!$producto) {
@@ -101,7 +103,10 @@ class ProductoController extends Controller
         $request->validate([
             'tipo' => ['required', Rule::in(['melamina', 'canto', 'accesorio', 'servicio', 'medelack'])],
             'nombre' => ['nullable', 'string', 'max:255'],
+            'codigo' => ['nullable', 'string', 'max:100', Rule::unique('productos', 'codigo')->ignore($producto->id)],
+            'codigo_barras' => ['nullable', 'string', 'max:100', Rule::unique('productos', 'codigo_barras')->ignore($producto->id)],
             'precio' => ['required', 'numeric', 'min:0'],
+            'costo' => ['nullable', 'numeric', 'min:0'],
             'stock' => ['nullable', 'integer', 'min:0'],
             'espesor' => ['nullable', Rule::in(['18mm', '15mm'])],
             'canto_tipo' => ['nullable', Rule::in(['grueso', 'delgado'])],
@@ -123,7 +128,10 @@ class ProductoController extends Controller
 
         $producto->update([
             'nombre' => $nombreFinal,
+            'codigo' => $request->codigo,
+            'codigo_barras' => $request->codigo_barras,
             'precio' => $request->precio,
+            'costo' => $request->costo,
             'stock' => $request->tipo === 'servicio' ? 0 : (int) $request->stock,
             'tipo' => $request->tipo,
             'espesor' => $request->tipo === 'melamina' ? ($request->espesor ?: '18mm') : null,
@@ -137,8 +145,6 @@ class ProductoController extends Controller
 
     public function destroy($id)
     {
-        if ($resp = $this->validarAdmin()) return $resp;
-
         $producto = Producto::find($id);
 
         if (!$producto) {
@@ -155,7 +161,14 @@ class ProductoController extends Controller
         $q = trim((string) $request->get('q', $request->get('nombre', '')));
 
         return response()->json(
-            Producto::where('nombre', 'like', "%{$q}%")
+            Producto::where(function ($query) use ($q) {
+                $query->where('nombre', 'like', "%{$q}%")
+                    ->orWhere('codigo', 'like', "%{$q}%")
+                    ->orWhere('codigo_barras', 'like', "%{$q}%")
+                    ->orWhere('tipo', 'like', "%{$q}%")
+                    ->orWhere('color', 'like', "%{$q}%")
+                    ->orWhere('espesor', 'like', "%{$q}%");
+            })
                 ->orderBy('nombre')
                 ->limit(20)
                 ->get()
@@ -167,7 +180,14 @@ class ProductoController extends Controller
         $q = trim((string) $request->get('q', $request->get('term', '')));
 
         return response()->json(
-            Producto::where('nombre', 'like', "%{$q}%")
+            Producto::where(function ($query) use ($q) {
+                $query->where('nombre', 'like', "%{$q}%")
+                    ->orWhere('codigo', 'like', "%{$q}%")
+                    ->orWhere('codigo_barras', 'like', "%{$q}%")
+                    ->orWhere('tipo', 'like', "%{$q}%")
+                    ->orWhere('color', 'like', "%{$q}%")
+                    ->orWhere('espesor', 'like', "%{$q}%");
+            })
                 ->orderBy('nombre')
                 ->limit(10)
                 ->get()
