@@ -15,9 +15,9 @@ class CreditoController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user || $user->rol !== 'admin') {
+        if (!$user || !$user->hasPermission('creditos.gestionar')) {
             return response()->json([
-                'message' => 'Solo el administrador puede realizar esta acción'
+                'message' => 'No tienes permiso para gestionar creditos'
             ], 403);
         }
 
@@ -41,8 +41,6 @@ class CreditoController extends Controller
 
     public function store(Request $request)
     {
-        if ($resp = $this->validarAdmin()) return $resp;
-
         $request->validate([
             'cliente_id' => ['required', 'exists:clientes,id'],
             'tipo' => ['required', Rule::in(['credito', 'cuenta'])],
@@ -80,8 +78,6 @@ class CreditoController extends Controller
 
     public function update(Request $request, $id)
     {
-        if ($resp = $this->validarAdmin()) return $resp;
-
         $credito = Credito::find($id);
 
         if (!$credito) {
@@ -113,8 +109,6 @@ class CreditoController extends Controller
 
     public function destroy($id)
     {
-        if ($resp = $this->validarAdmin()) return $resp;
-
         $credito = Credito::find($id);
 
         if (!$credito) {
@@ -128,8 +122,6 @@ class CreditoController extends Controller
 
     public function abonar(Request $request, $id)
     {
-        if ($resp = $this->validarAdmin()) return $resp;
-
         $credito = Credito::with('cliente')->find($id);
 
         if (!$credito) {

@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     protected $fillable = [
+        'codigo',
+        'codigo_barras',
         'nombre',
         'precio',
+        'costo',
         'stock',
         'tipo',
         'espesor',
@@ -19,6 +22,7 @@ class Producto extends Model
 
     protected $casts = [
         'precio' => 'decimal:2',
+        'costo' => 'decimal:2',
         'stock' => 'integer',
     ];
 
