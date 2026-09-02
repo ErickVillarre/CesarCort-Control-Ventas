@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useMemo, useState } from "react";
 import api from "./api/axios";
 import toast from "react-hot-toast";
@@ -20,11 +19,6 @@ const emptyForm = {
 };
 
 export default function Clientes() {
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const permissions = user?.permissions || [];
-  const canCreate = permissions.includes("*") || permissions.includes("clientes.crear");
-  const canEdit = permissions.includes("*") || permissions.includes("clientes.editar");
-  const canDelete = permissions.includes("*") || permissions.includes("clientes.desactivar");
   const [clientes, setClientes] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -66,11 +60,6 @@ export default function Clientes() {
   };
 
   const abrirNuevo = () => {
-    if (!canCreate) {
-      toast.error("No tienes permiso para crear clientes");
-      return;
-    }
-
     reset();
     setShowModal(true);
   };
@@ -166,14 +155,12 @@ export default function Clientes() {
             <p className="text-sm text-gray-500">Registro, búsqueda e información legal.</p>
           </div>
 
-          {canCreate && (
-            <button
-              onClick={abrirNuevo}
-              className="bg-zinc-900 hover:bg-zinc-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-            >
-              <Plus size={18} /> Nuevo cliente
-            </button>
-          )}
+          <button
+            onClick={abrirNuevo}
+            className="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          >
+            <Plus size={18} /> Nuevo cliente
+          </button>
         </div>
 
         <div className="mt-4 relative">
@@ -239,37 +226,31 @@ export default function Clientes() {
 
                   <div className="mt-4 flex gap-3 flex-wrap">
                     {c.dni_imagen && (
-                      <a className="text-zinc-700 underline" href={`http://127.0.0.1:8000/storage/${c.dni_imagen}`} target="_blank" rel="noreferrer">
+                      <a className="text-blue-600 underline" href={`http://127.0.0.1:8000/storage/${c.dni_imagen}`} target="_blank" rel="noreferrer">
                         Ver DNI
                       </a>
                     )}
                     {c.firma_imagen && (
-                      <a className="text-zinc-700 underline" href={`http://127.0.0.1:8000/storage/${c.firma_imagen}`} target="_blank" rel="noreferrer">
+                      <a className="text-blue-600 underline" href={`http://127.0.0.1:8000/storage/${c.firma_imagen}`} target="_blank" rel="noreferrer">
                         Ver firma
                       </a>
                     )}
                   </div>
 
-                  {(canEdit || canDelete) && (
-                    <div className="mt-4 flex gap-2">
-                      {canEdit && (
-                        <button
-                          onClick={() => editar(c)}
-                          className="bg-zinc-200 hover:bg-zinc-300 px-3 py-2 rounded-lg flex items-center gap-2"
-                        >
-                          <Pencil size={16} /> Editar
-                        </button>
-                      )}
-                      {canDelete && (
-                        <button
-                          onClick={() => eliminar(c.id)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg flex items-center gap-2"
-                        >
-                          <Trash2 size={16} /> Eliminar
-                        </button>
-                      )}
-                    </div>
-                  )}
+                  <div className="mt-4 flex gap-2">
+                    <button
+                      onClick={() => editar(c)}
+                      className="bg-yellow-400 hover:bg-yellow-500 px-3 py-2 rounded-lg flex items-center gap-2"
+                    >
+                      <Pencil size={16} /> Editar
+                    </button>
+                    <button
+                      onClick={() => eliminar(c.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg flex items-center gap-2"
+                    >
+                      <Trash2 size={16} /> Eliminar
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -392,7 +373,7 @@ export default function Clientes() {
               </button>
               <button
                 onClick={guardar}
-                className="bg-zinc-900 hover:bg-zinc-700 text-white px-4 py-2 rounded-lg"
+                className="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg"
               >
                 Guardar
               </button>
