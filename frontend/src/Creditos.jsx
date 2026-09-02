@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps, react-hooks/immutability */
 import { useEffect, useMemo, useState } from "react";
 import api from "./api/axios";
 import toast from "react-hot-toast";
@@ -16,11 +15,7 @@ const empty = {
 
 export default function Creditos() {
   const user = JSON.parse(localStorage.getItem("user") || "null");
-  const permissions = user?.permissions || [];
-  const canCreate = permissions.includes("*") || permissions.includes("creditos.aprobar");
-  const canEdit = permissions.includes("*") || permissions.includes("creditos.editar");
-  const canDelete = permissions.includes("*") || permissions.includes("creditos.desactivar");
-  const canManage = canCreate || canEdit || canDelete;
+  const isAdmin = user?.rol === "admin";
 
   const [clientes, setClientes] = useState([]);
   const [creditos, setCreditos] = useState([]);
@@ -35,10 +30,7 @@ export default function Creditos() {
 
   const cargar = async () => {
     try {
-      const [c, cr] = await Promise.all([
-        canManage ? api.get("/clientes") : Promise.resolve({ data: [] }),
-        api.get("/creditos"),
-      ]);
+      const [c, cr] = await Promise.all([api.get("/clientes"), api.get("/creditos")]);
       setClientes(c.data || []);
       setCreditos(cr.data || []);
     } catch {
@@ -55,6 +47,15 @@ export default function Creditos() {
         String(c.limite).includes(q)
     );
   }, [creditos, busqueda]);
+
+  if (!isAdmin) {
+    return (
+      <div className="bg-white rounded-xl shadow p-6">
+        <h2 className="text-xl font-bold">Créditos</h2>
+        <p className="text-gray-600 mt-2">Solo el administrador puede acceder a esta vista.</p>
+      </div>
+    );
+  }
 
   const reset = () => {
     setForm(empty);
@@ -124,17 +125,15 @@ export default function Creditos() {
           <p className="text-sm text-gray-500">Gestión de préstamos y cuentas.</p>
         </div>
 
-        {canCreate && (
         <button
           onClick={() => {
             reset();
             setShowModal(true);
           }}
-          className="bg-zinc-900 hover:bg-zinc-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          className="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2"
         >
           <Plus size={18} /> Nuevo crédito
         </button>
-        )}
       </div>
 
       <div className="bg-white rounded-xl shadow p-5">
@@ -164,16 +163,14 @@ export default function Creditos() {
                 {c.observacion && <p className="text-sm mt-2">{c.observacion}</p>}
               </div>
 
-              {(canEdit || canDelete) && (
               <div className="flex gap-2">
-                {canEdit && <button onClick={() => editar(c)} className="bg-zinc-200 hover:bg-zinc-300 px-3 py-2 rounded-lg flex items-center gap-2">
+                <button onClick={() => editar(c)} className="bg-yellow-400 hover:bg-yellow-500 px-3 py-2 rounded-lg flex items-center gap-2">
                   <Pencil size={16} /> Editar
-                </button>}
-                {canDelete && <button onClick={() => eliminar(c.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg flex items-center gap-2">
+                </button>
+                <button onClick={() => eliminar(c.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg flex items-center gap-2">
                   <Trash2 size={16} /> Eliminar
-                </button>}
+                </button>
               </div>
-              )}
             </div>
           </div>
         ))}
@@ -268,7 +265,7 @@ export default function Creditos() {
               <button
                 type="button"
                 onClick={guardar}
-                className="bg-zinc-900 hover:bg-zinc-700 text-white px-4 py-2 rounded-lg"
+                className="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg"
               >
                 Guardar
               </button>
