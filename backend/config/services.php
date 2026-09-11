@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'landing_demo' => [
+        'user' => env('LANDING_DEMO_USER'),
+        'password' => env('LANDING_DEMO_PASSWORD'),
+        'crm_login_url' => env('LANDING_CRM_LOGIN_URL', env('FRONTEND_URL', 'http://127.0.0.1:5173') . '/login'),
+    ],
+
 ];

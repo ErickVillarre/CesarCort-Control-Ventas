@@ -121,9 +121,9 @@ class CreditoController extends Controller
             return response()->json(['message' => 'Crédito no encontrado'], 404);
         }
 
-        $credito->delete();
+        $credito->update(['estado' => 'cerrado']);
 
-        return response()->json(['message' => 'Crédito eliminado correctamente']);
+        return response()->json(['message' => 'Credito cerrado correctamente']);
     }
 
     public function abonar(Request $request, $id)

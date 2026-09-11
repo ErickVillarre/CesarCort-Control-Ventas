@@ -50,8 +50,11 @@ class ClienteController extends Controller
     {
         $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
+            'codigo_cliente' => ['nullable', 'string', 'max:100', 'unique:clientes,codigo_cliente'],
             'apodo' => ['nullable', 'string', 'max:255'],
             'dni' => ['nullable', 'string', 'max:50', 'unique:clientes,dni'],
+            'ruc' => ['nullable', 'string', 'size:11', 'unique:clientes,ruc'],
+            'razon_social' => ['nullable', 'string', 'max:255'],
             'telefono' => ['nullable', 'string', 'max:30'],
             'email' => ['nullable', 'email', 'max:255', 'unique:clientes,email'],
             'direccion' => ['nullable', 'string', 'max:255'],
@@ -65,8 +68,11 @@ class ClienteController extends Controller
 
         $cliente = Cliente::create([
             'nombre' => $request->nombre,
+            'codigo_cliente' => $request->codigo_cliente,
             'apodo' => $request->apodo,
             'dni' => $request->dni,
+            'ruc' => $request->ruc,
+            'razon_social' => $request->razon_social,
             'telefono' => $request->telefono,
             'email' => $request->email,
             'direccion' => $request->direccion,
@@ -107,8 +113,11 @@ class ClienteController extends Controller
 
         $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
+            'codigo_cliente' => ['nullable', 'string', 'max:100', Rule::unique('clientes', 'codigo_cliente')->ignore($cliente->id)],
             'apodo' => ['nullable', 'string', 'max:255'],
             'dni' => ['nullable', 'string', 'max:50', Rule::unique('clientes', 'dni')->ignore($cliente->id)],
+            'ruc' => ['nullable', 'string', 'size:11', Rule::unique('clientes', 'ruc')->ignore($cliente->id)],
+            'razon_social' => ['nullable', 'string', 'max:255'],
             'telefono' => ['nullable', 'string', 'max:30'],
             'email' => ['nullable', 'email', 'max:255', Rule::unique('clientes', 'email')->ignore($cliente->id)],
             'direccion' => ['nullable', 'string', 'max:255'],
@@ -121,8 +130,11 @@ class ClienteController extends Controller
         ]);
 
         $cliente->nombre = $request->nombre;
+        $cliente->codigo_cliente = $request->codigo_cliente;
         $cliente->apodo = $request->apodo;
         $cliente->dni = $request->dni;
+        $cliente->ruc = $request->ruc;
+        $cliente->razon_social = $request->razon_social;
         $cliente->telefono = $request->telefono;
         $cliente->email = $request->email;
         $cliente->direccion = $request->direccion;
@@ -141,23 +153,15 @@ class ClienteController extends Controller
 
     public function destroy($id)
     {
-        $cliente = Cliente::find($id);
+        $cliente = Cliente::withCount(['ventas', 'creditos'])->find($id);
 
         if (!$cliente) {
             return response()->json(['message' => 'Cliente no encontrado'], 404);
         }
 
-        if ($cliente->dni_imagen) {
-            Storage::disk('public')->delete($cliente->dni_imagen);
-        }
+        $cliente->update(['activo' => false]);
 
-        if ($cliente->firma_imagen) {
-            Storage::disk('public')->delete($cliente->firma_imagen);
-        }
-
-        $cliente->delete();
-
-        return response()->json(['message' => 'Cliente eliminado correctamente']);
+        return response()->json(['message' => 'Cliente desactivado correctamente']);
     }
 
     public function buscar(Request $request)
@@ -167,7 +171,10 @@ class ClienteController extends Controller
         $clientes = Cliente::where(function ($query) use ($q) {
             $query->where('nombre', 'like', "%{$q}%")
                 ->orWhere('apodo', 'like', "%{$q}%")
-                ->orWhere('dni', 'like', "%{$q}%");
+                ->orWhere('dni', 'like', "%{$q}%")
+                ->orWhere('ruc', 'like', "%{$q}%")
+                ->orWhere('telefono', 'like', "%{$q}%")
+                ->orWhere('codigo_cliente', 'like', "%{$q}%");
         })
         ->orderBy('nombre')
         ->limit(20)
