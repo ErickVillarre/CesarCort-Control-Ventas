@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-09",
+  "status": "partial_frontend_only",
+  "applicationCommit": "30b8c596ee0461ee8f742076c8ae63173e24ad37",
+  "branch": "apf2-vercel",
+  "source": "Clean git archive of applicationCommit, excluding environment files, backend and local changes",
+  "project": "cesarcontrol-apf2",
+  "scope": "notrabajamos",
+  "preview": {
+    "id": "dpl_5sxqETmiE7SUVFNfry7EwGoN1tnm",
+    "url": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app",
+    "readyState": "READY",
+    "protection": "Vercel authentication preserved",
+    "browserEvidence": "preview-remoto.json"
+  },
+  "production": {
+    "id": "dpl_6bJf2MDSuPVVBko8sEdLgVPnWaYw",
+    "url": "https://cesarcontrol-apf2-oe83xfw7j-notrabajamos.vercel.app",
+    "publicAlias": "https://cesarcontrol-apf2.vercel.app",
+    "readyState": "READY",
+    "verifiedWith": "vercel inspect and Chrome",
+    "browserEvidence": "produccion-remota.json"
+  },
+  "sequenceNote": "Vercel automatically promoted the first untargeted deployment to production. An explicit preview was then deployed and tested before the final --prod deployment.",
+  "environment": {
+    "DEPLOYMENT_MODE": "frontend-only in Preview and Production",
+    "VITE_API_URL": "absent"
+  },
+  "publicApi": null,
+  "externalMysql": "not configured",
+  "publicLogin": "disabled until public API is configured"
+}

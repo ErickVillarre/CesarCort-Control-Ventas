@@ -4,7 +4,7 @@ Rama de despliegue: apf2-vercel, basada en crm-erp-permisos-modulos. React/Vite 
 
 ## Estado y alcance
 
-Esta entrega prepara la publicacion del frontend en Vercel. La API publica y MySQL externo estan pendientes. El modo parcial muestra un aviso y deshabilita el acceso hasta conectar una API real. Ver [estado del despliegue](docs/APF2/estado-despliegue.md).
+Frontend publicado: [CesarControl en Vercel](https://cesarcontrol-apf2.vercel.app). Estado PARCIAL: la API publica y MySQL externo estan pendientes. El modo parcial muestra un aviso y deshabilita el acceso hasta conectar una API real. Ver [estado del despliegue](docs/APF2/estado-despliegue.md), con commit, preview y evidencias.
 
 El commit de despliegue incluye configuracion, ajustes de URLs, aviso de API pendiente y documentacion. Las correcciones funcionales APF2 anteriores se conservan como cambios locales separados; no se incluyen automaticamente en esta publicacion. Las evidencias APF2 historicas describen esa instalacion local.
 

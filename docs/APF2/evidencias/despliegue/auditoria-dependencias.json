@@ -1,0 +1,78 @@
+{
+  "reviewed_at_utc": "2026-10-09 15:24:48 UTC",
+  "release": "30b8c59",
+  "scope": "Auditoria de solo lectura del frontend de la copia limpia de release; no se modificaron package.json ni package-lock.json y no se ejecuto npm audit fix.",
+  "runtime": {
+    "node": "v22.15.0",
+    "npm": "10.9.2"
+  },
+  "package_lock_sha256": "02E52BEF65EA1B951C2F064DEC670F8F91C5C0289576CD2B155855E7C2F27096",
+  "registry": "https://registry.npmjs.org",
+  "checks": [
+    {
+      "command": "npm audit --omit=dev --json --registry=https://registry.npmjs.org",
+      "exit_code": 0,
+      "result": {
+        "auditReportVersion": 2,
+        "vulnerabilities": {},
+        "metadata": {
+          "vulnerabilities": {
+            "info": 0,
+            "low": 0,
+            "moderate": 0,
+            "high": 0,
+            "critical": 0,
+            "total": 0
+          },
+          "dependencies": {
+            "prod": 35,
+            "dev": 238,
+            "optional": 33,
+            "peer": 0,
+            "peerOptional": 0,
+            "total": 272
+          }
+        }
+      }
+    },
+    {
+      "command": "npm audit --include=dev --json --registry=https://registry.npmjs.org",
+      "exit_code": 0,
+      "result": {
+        "auditReportVersion": 2,
+        "vulnerabilities": {},
+        "metadata": {
+          "vulnerabilities": {
+            "info": 0,
+            "low": 0,
+            "moderate": 0,
+            "high": 0,
+            "critical": 0,
+            "total": 0
+          },
+          "dependencies": {
+            "prod": 35,
+            "dev": 238,
+            "optional": 33,
+            "peer": 0,
+            "peerOptional": 0,
+            "total": 272
+          }
+        }
+      }
+    }
+  ],
+  "vercel_build_warning": {
+    "source": "Resumen del build de Vercel informado por el agente principal; no es el resultado de esta auditoria local.",
+    "vulnerabilities": {
+      "low": 1,
+      "moderate": 2,
+      "high": 16,
+      "critical": 0,
+      "total": 19
+    }
+  },
+  "conclusion": "La auditoria local con registro npm explicito reporta cero vulnerabilidades tanto para dependencias de produccion como incluyendo desarrollo. No se reprodujeron las 19 vulnerabilidades informadas en Vercel.",
+  "limitation": "Sin los avisos detallados de npm audit del entorno de Vercel no se pueden identificar paquetes afectados, distinguir su alcance produccion/desarrollo ni reconciliar ambos resultados. El cero local no invalida la advertencia del build remoto ni demuestra ausencia general de vulnerabilidades.",
+  "next_step": "Conservar el aviso remoto como pendiente y obtener npm audit --json usando el mismo lock, versiones Node/npm y entorno del build de Vercel antes de decidir actualizaciones; no ampliar este despliegue con cambios automaticos de dependencias."
+}

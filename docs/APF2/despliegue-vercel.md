@@ -30,14 +30,19 @@ Desde esa copia limpia, iniciar sesion manualmente si es necesario, vincular sol
 
 ~~~powershell
 npx vercel login
-npx vercel link --yes --team notrabajamos --project cesarcontrol-apf2
-npx vercel --yes --scope notrabajamos
+npx vercel link --yes --scope notrabajamos --project cesarcontrol-apf2
+npx vercel env add DEPLOYMENT_MODE 'preview,production' --value frontend-only --type config --yes --scope notrabajamos
+npx vercel deploy --target preview --yes --scope notrabajamos
 ~~~
+
+Si la variable ya existe con el valor correcto, omitir env add. La CLI lee automaticamente frontend/vercel.json al resolver Root Directory. Usar --target preview explicitamente: la primera publicacion sin target fue promovida automaticamente a produccion por Vercel.
+
+Preview verificada: https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app. La preview conserva proteccion de Vercel; comprobar con la cuenta autorizada o vercel curl. Produccion publica: https://cesarcontrol-apf2.vercel.app.
 
 Verificar URL real, recursos, ausencia de 404, rutas directas y aviso parcial. Solo despues:
 
 ~~~powershell
-npx vercel --prod --yes --scope notrabajamos
+npx vercel deploy --prod --yes --scope notrabajamos
 ~~~
 
 ## API y MySQL
@@ -48,4 +53,4 @@ No ejecutar el seeder demo en produccion: solo admite local/testing. Las cuentas
 
 ## Rollback
 
-Desde Vercel, volver a un despliegue anterior verificado del mismo proyecto, o desplegar nuevamente su commit exacto. No se dispone de un despliegue anterior durante la primera publicacion. API: volver a la imagen/revision compatible conservando claves y datos. Restaurar respaldos solo en una base separada para verificar antes de cambiar conexion. No revertir datos con comandos destructivos ni cambiar main.
+Desde Vercel, volver a un despliegue anterior verificado del mismo proyecto, o desplegar nuevamente su commit exacto. La referencia verificada actual es 30b8c596ee0461ee8f742076c8ae63173e24ad37, modo frontend-only; las publicaciones de esta entrega contienen el mismo frontend. No existe una version publica previa con API funcional. API futura: volver a la imagen/revision compatible conservando claves y datos. Restaurar respaldos solo en una base separada para verificar antes de cambiar conexion. No revertir datos con comandos destructivos ni cambiar main.

@@ -1,0 +1,65 @@
+{
+  "base": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app",
+  "checkedAt": "2026-10-09T15:23:45.120Z",
+  "checks": [
+    {
+      "route": "/",
+      "status": 200,
+      "finalUrl": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app/",
+      "banner": true,
+      "loginDisabled": true,
+      "brokenImages": 0,
+      "ok": true
+    },
+    {
+      "route": "/login",
+      "status": 200,
+      "finalUrl": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app/login",
+      "banner": true,
+      "loginDisabled": true,
+      "brokenImages": 0,
+      "ok": true
+    },
+    {
+      "route": "/ventas",
+      "status": 200,
+      "finalUrl": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app/ventas",
+      "banner": true,
+      "loginDisabled": true,
+      "brokenImages": 0,
+      "ok": true
+    }
+  ],
+  "httpErrors": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "apiRequests": [],
+  "assets": [
+    {
+      "status": 200,
+      "url": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app/assets/index-DmgKOy4t.css"
+    },
+    {
+      "status": 200,
+      "url": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app/assets/index-6Yela6ob.js"
+    },
+    {
+      "status": 304,
+      "url": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app/assets/index-DmgKOy4t.css"
+    },
+    {
+      "status": 304,
+      "url": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app/assets/index-6Yela6ob.js"
+    },
+    {
+      "status": 304,
+      "url": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app/assets/index-DmgKOy4t.css"
+    },
+    {
+      "status": 304,
+      "url": "https://cesarcontrol-apf2-fzoiozw3f-notrabajamos.vercel.app/assets/index-6Yela6ob.js"
+    }
+  ],
+  "previewAccess": "Cookie temporal generada por la CLI autenticada; proteccion conservada.",
+  "ok": true
+}
