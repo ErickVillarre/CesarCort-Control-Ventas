@@ -1,0 +1,27 @@
+C:\Windows\System32\cmd.exe /d /s /c npm.cmd run build
+
+> ventas-frontend@0.0.0 build
+> vite build
+
+vite v8.0.10 building client environment for production...
+transforming...✓ 1792 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.46 kB │ gzip:   0.29 kB
+dist/assets/index-DmgKOy4t.css   19.76 kB │ gzip:   4.50 kB
+dist/assets/index-Ikca2tcM.js   350.52 kB │ gzip: 103.43 kB
+
+✓ built in 12.94s
+
+Publicacion parcial: no se incluira una API y el inicio de sesion estara deshabilitado.
+Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[PLUGIN_TIMINGS] Warning: Your build spent significant time in plugins. Here is a breakdown:
+  - vite:build-html (76%)
+  - vite:css (11%)
+  - rolldown:vite-resolve (10%)
+See https://rolldown.rs/options/checks#plugintimings for more details.
+
+
+Exit: 0

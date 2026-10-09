@@ -1,0 +1,8 @@
+C:\Windows\System32\cmd.exe /d /s /c npm.cmd run lint
+
+> ventas-frontend@0.0.0 lint
+> eslint .
+
+
+
+Exit: 0

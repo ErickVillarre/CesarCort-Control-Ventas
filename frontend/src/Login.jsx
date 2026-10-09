@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Eye, EyeOff, LockKeyhole, Loader2, Mail } from "lucide-react";
 import api from "./api/axios";
+import { apiUnavailable, deploymentNotice } from "./config/deployment";
 import toast from "react-hot-toast";
 
 function Login({ onLogin }) {
@@ -13,6 +14,11 @@ function Login({ onLogin }) {
 
   const login = async () => {
     setError("");
+
+    if (apiUnavailable) {
+      setError(deploymentNotice);
+      return;
+    }
 
     if (!email.trim() || !password.trim()) {
       setError("Completa el usuario y la contrasena.");
@@ -87,6 +93,11 @@ function Login({ onLogin }) {
           </div>
 
           <div className="px-7 py-6">
+            {apiUnavailable && (
+              <div role="status" className="mb-4 rounded border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                {deploymentNotice}
+              </div>
+            )}
             <div className="space-y-4">
               <label className="block">
                 <span className="text-sm font-medium text-zinc-700">Correo o usuario</span>
@@ -145,7 +156,7 @@ function Login({ onLogin }) {
 
             <button
               onClick={login}
-              disabled={loading}
+              disabled={loading || apiUnavailable}
               className="mt-5 flex w-full items-center justify-center gap-2 rounded bg-zinc-900 px-4 py-3 font-semibold text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading && <Loader2 size={18} className="animate-spin" />}

@@ -1,106 +1,47 @@
-# CesarControl CRM/ERP
+# CesarControl CRM/ERP — despliegue APF2
 
-Sistema de gestion empresarial para ventas de melamina, inventario, clientes, caja, creditos, mantenimiento, recursos humanos, marketing y reportes.
+Rama de despliegue: apf2-vercel, basada en crm-erp-permisos-modulos. React/Vite para frontend, Laravel 12 para API y MySQL para datos.
 
-## Requisitos
+## Estado y alcance
 
-- PHP 8.2 o superior.
-- Composer.
-- MySQL 8.
-- Node.js y npm.
+Esta entrega prepara la publicacion del frontend en Vercel. La API publica y MySQL externo estan pendientes. El modo parcial muestra un aviso y deshabilita el acceso hasta conectar una API real. Ver [estado del despliegue](docs/APF2/estado-despliegue.md).
 
-## Estructura
+El commit de despliegue incluye configuracion, ajustes de URLs, aviso de API pendiente y documentacion. Las correcciones funcionales APF2 anteriores se conservan como cambios locales separados; no se incluyen automaticamente en esta publicacion. Las evidencias APF2 historicas describen esa instalacion local.
 
-- `backend`: API Laravel con Sanctum.
-- `frontend`: React, Vite y Tailwind.
-- `backend/database/migrations`: estructura de base de datos.
-- `backend/database/seeders`: seeders voluntarios para roles y datos locales.
+## Desarrollo local
 
-## Variables
+PHP 8.2+, Composer, MySQL, Node 22.12+ y npm. Configurar .env desde los ejemplos solo si falta, usando la conexion propia y una APP_KEY local. Respaldar datos antes de migrar. No ejecutar reinicios de base ni seeders contra una base existente sin revisar su alcance.
 
-Configura `backend/.env` desde `backend/.env.example` y completa los datos de MySQL en tu entorno local. No publiques `.env`.
-
-Para el frontend puedes crear `frontend/.env` desde `frontend/.env.example`:
-
-```env
-VITE_API_URL=http://127.0.0.1:8000/api
-VITE_YAPE_QR_URL=
-```
-
-`VITE_YAPE_QR_URL` debe apuntar a un QR configurado por la empresa. Si no se configura, la pantalla de ventas lo muestra como pendiente.
-
-## Instalacion
-
-Backend:
-
-```bash
+~~~powershell
 cd backend
 composer install
-php artisan key:generate
-php artisan migrate
-```
+php artisan migrate:status
+php artisan serve --host=127.0.0.1 --port=8000
+~~~
 
-Frontend:
+Otra terminal:
 
-```bash
+~~~powershell
 cd frontend
-npm install
+npm ci
 npm run dev
-```
+~~~
 
-API local: `http://127.0.0.1:8000/api`
+Frontend local configurado con VITE_API_URL=http://127.0.0.1:8000/api, solo en .env ignorado. Health de Laravel: /up. La instalacion APF2 local completa tambien tiene /api/health con comprobacion MySQL; la API remota aun no existe.
 
-Frontend local: la URL que muestre Vite, normalmente `http://127.0.0.1:5173`.
+## Verificacion y build parcial
 
-## Usuarios y accesos
-
-El sistema usa roles y permisos por modulo y por accion. El administrador principal debe gestionar usuarios desde el modulo de empleados y accesos.
-
-Seeder de roles y permisos:
-
-```bash
-cd backend
-php artisan db:seed --class=RolesAndDemoUsersSeeder
-```
-
-Seeder de datos abundantes para desarrollo local:
-
-```bash
-cd backend
-php artisan db:seed --class=DevelopmentDemoDataSeeder
-```
-
-Este seeder solo se ejecuta en entorno local. No elimina informacion existente y evita duplicar registros base cuando hay codigos o claves configurables.
-
-## Modulos
-
-- Ventas: punto de venta, preventas, comprobantes internos y envio a caja.
-- Caja: apertura, cobro, validacion, caja chica y cierre.
-- Clientes y CRM: ficha, busqueda, seguimiento y estado activo/inactivo.
-- Inventario: productos, stock y avisos de faltantes.
-- Creditos y dinero a cuenta: saldos, movimientos y restricciones por rol.
-- Mantenimiento: maquinas, fallas, mantenimientos, repuestos, pedidos y cortes de energia.
-- Recursos Humanos: empleados, asistencia y movimientos laborales.
-- Marketing: tendencias desde ventas, redes configurables y calendario.
-- Reportes: centro de reportes con filtros y exportacion CSV.
-
-## Pruebas
-
-Backend:
-
-```bash
-cd backend
-php artisan test
-```
-
-Frontend:
-
-```bash
+~~~powershell
 cd frontend
 npm run lint
+$env:DEPLOYMENT_MODE='frontend-only'
 npm run build
-```
+~~~
 
-## Preparacion para GitHub
+Para publicar con API, quitar ese modo y configurar VITE_API_URL con su URL HTTPS real terminada en /api. Nunca subir .env, credenciales, dumps, vendor ni node_modules.
 
-El proyecto ignora archivos de entorno, dependencias, logs, sesiones, dumps SQL, archivos privados y subidas sensibles. Antes de publicar, revisa que no existan credenciales ni datos reales en archivos versionados.
+## Publicacion y rollback
+
+Vercel: Root Directory frontend, Vite, npm ci, npm run build, dist. La CLI debe ejecutarse desde la raiz del repositorio/copia limpia con esa configuracion. Publicar primero preview y verificar antes de produccion. [Pasos y rollback](docs/APF2/despliegue-vercel.md), [variables](docs/APF2/variables-entorno.md), [pruebas](docs/APF2/pruebas-despliegue.md).
+
+Para rollback, volver al despliegue verificado anterior del mismo proyecto y conservar datos/claves. Dockerfile de API preparado, pendiente de construccion y comprobacion en un entorno con Docker. No se publica la base local de XAMPP.

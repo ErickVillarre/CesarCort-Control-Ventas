@@ -1,0 +1,17 @@
+# Deploy only frontend source; never upload backend data, local environments or evidence.
+.git
+.vercel
+backend
+docs
+scripts
+**/.env
+**/.env.*
+**/auth.json
+**/node_modules
+**/dist
+**/vendor
+**/*.log
+**/*.sql
+**/*.dump
+**/*.pem
+**/*.key

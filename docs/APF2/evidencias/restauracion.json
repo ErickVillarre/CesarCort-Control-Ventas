@@ -1,0 +1,222 @@
+{
+    "database": "apf2_restore_20261009_081448",
+    "dump": "ventas-melamina-20261009-030938.sql",
+    "sha256": "6b0e3fa5ae077ffa25766e17d266828c90d129de50d19b07ac6bc07cee2777d4",
+    "tables": {
+        "autorizacion_precios": {
+            "count": 0,
+            "restored": 0,
+            "identical": true
+        },
+        "cache": {
+            "count": 0,
+            "restored": 0,
+            "identical": true
+        },
+        "cache_locks": {
+            "count": 0,
+            "restored": 0,
+            "identical": true
+        },
+        "caja_aperturas": {
+            "count": 20,
+            "restored": 20,
+            "identical": true
+        },
+        "caja_chica_movimientos": {
+            "count": 20,
+            "restored": 20,
+            "identical": true
+        },
+        "caja_movimientos": {
+            "count": 100,
+            "restored": 100,
+            "identical": true
+        },
+        "clientes": {
+            "count": 43,
+            "restored": 43,
+            "identical": true
+        },
+        "credito_movimientos": {
+            "count": 60,
+            "restored": 60,
+            "identical": true
+        },
+        "creditos": {
+            "count": 35,
+            "restored": 35,
+            "identical": true
+        },
+        "crm_seguimientos": {
+            "count": 0,
+            "restored": 0,
+            "identical": true
+        },
+        "cuentas_por_cobrar": {
+            "count": 20,
+            "restored": 20,
+            "identical": true
+        },
+        "cuentas_por_pagar": {
+            "count": 15,
+            "restored": 15,
+            "identical": true
+        },
+        "detalle_ventas": {
+            "count": 741,
+            "restored": 741,
+            "identical": true
+        },
+        "dinero_cuenta_movimientos": {
+            "count": 50,
+            "restored": 50,
+            "identical": true
+        },
+        "empleado_asistencias": {
+            "count": 228,
+            "restored": 228,
+            "identical": true
+        },
+        "empleado_movimientos_rrhh": {
+            "count": 24,
+            "restored": 24,
+            "identical": true
+        },
+        "empleados": {
+            "count": 14,
+            "restored": 14,
+            "identical": true
+        },
+        "failed_jobs": {
+            "count": 0,
+            "restored": 0,
+            "identical": true
+        },
+        "job_batches": {
+            "count": 0,
+            "restored": 0,
+            "identical": true
+        },
+        "jobs": {
+            "count": 0,
+            "restored": 0,
+            "identical": true
+        },
+        "mantenimiento_cambios_piezas": {
+            "count": 15,
+            "restored": 15,
+            "identical": true
+        },
+        "mantenimiento_cortes_energia": {
+            "count": 8,
+            "restored": 8,
+            "identical": true
+        },
+        "mantenimiento_fallas": {
+            "count": 20,
+            "restored": 20,
+            "identical": true
+        },
+        "mantenimiento_maquinarias": {
+            "count": 3,
+            "restored": 3,
+            "identical": true
+        },
+        "mantenimiento_pedidos_repuestos": {
+            "count": 15,
+            "restored": 15,
+            "identical": true
+        },
+        "mantenimiento_registros": {
+            "count": 30,
+            "restored": 30,
+            "identical": true
+        },
+        "mantenimiento_repuestos": {
+            "count": 20,
+            "restored": 20,
+            "identical": true
+        },
+        "marketing_campanas": {
+            "count": 8,
+            "restored": 8,
+            "identical": true
+        },
+        "marketing_publicaciones": {
+            "count": 24,
+            "restored": 24,
+            "identical": true
+        },
+        "marketing_redes_sociales": {
+            "count": 5,
+            "restored": 5,
+            "identical": true
+        },
+        "migrations": {
+            "count": 19,
+            "restored": 19,
+            "identical": true
+        },
+        "password_reset_tokens": {
+            "count": 0,
+            "restored": 0,
+            "identical": true
+        },
+        "permission_role": {
+            "count": 370,
+            "restored": 370,
+            "identical": true
+        },
+        "permissions": {
+            "count": 247,
+            "restored": 247,
+            "identical": true
+        },
+        "personal_access_tokens": {
+            "count": 44,
+            "restored": 44,
+            "identical": true
+        },
+        "productos": {
+            "count": 82,
+            "restored": 82,
+            "identical": true
+        },
+        "public_solicitudes": {
+            "count": 16,
+            "restored": 16,
+            "identical": true
+        },
+        "roles": {
+            "count": 9,
+            "restored": 9,
+            "identical": true
+        },
+        "sessions": {
+            "count": 4,
+            "restored": 4,
+            "identical": true
+        },
+        "stock_alertas": {
+            "count": 37,
+            "restored": 37,
+            "identical": true
+        },
+        "users": {
+            "count": 18,
+            "restored": 18,
+            "identical": true
+        },
+        "venta_pagos": {
+            "count": 228,
+            "restored": 228,
+            "identical": true
+        },
+        "ventas": {
+            "count": 250,
+            "restored": 250,
+            "identical": true
+        }
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "clientes": {
+        "previous": 43,
+        "current": 55,
+        "preserved": true
+    },
+    "productos": {
+        "previous": 82,
+        "current": 106,
+        "preserved": true
+    },
+    "ventas": {
+        "previous": 250,
+        "current": 282,
+        "preserved": true
+    },
+    "detalle_ventas": {
+        "previous": 741,
+        "current": 773,
+        "preserved": true
+    },
+    "creditos": {
+        "previous": 35,
+        "current": 59,
+        "preserved": true
+    },
+    "credito_movimientos": {
+        "previous": 60,
+        "current": 73,
+        "preserved": true
+    },
+    "users": {
+        "previous": 18,
+        "current": 22,
+        "preserved": true
+    },
+    "empleados": {
+        "previous": 14,
+        "current": 18,
+        "preserved": true
+    }
+}

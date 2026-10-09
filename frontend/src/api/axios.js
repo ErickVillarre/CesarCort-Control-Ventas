@@ -1,10 +1,15 @@
 import axios from "axios";
+import { apiBaseUrl, apiUnavailable, deploymentNotice } from "../config/deployment";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api",
+  baseURL: apiBaseUrl,
 });
 
 api.interceptors.request.use((config) => {
+  if (apiUnavailable) {
+    throw new axios.AxiosError(deploymentNotice, "ERR_API_NOT_CONFIGURED", config);
+  }
+
   const sessionToken = localStorage.getItem("token");
 
   if (sessionToken) {

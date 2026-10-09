@@ -1,0 +1,28 @@
+C:\xampp\php\php.exe artisan test --no-ansi
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true                                                                                            0.03s
+
+   PASS  Tests\Feature\Apf2Test
+  ✓ t01 t03 login and role restrictions                                                                          3.57s
+  ✓ t04 stock failure rolls back everything                                                                      0.69s
+  ✓ t05 credit sale updates balance stock and payment                                                            0.73s
+  ✓ insufficient credit rolls back sale details and stock                                                        0.76s
+  ✓ account sale deducts balance and cash sale records change                                                    0.76s
+  ✓ t06 invalid duplicate products and unauthorized discount                                                     0.74s
+  ✓ invoice and inactive client validation                                                                       0.69s
+  ✓ caja cannot charge twice and updates credit                                                                  0.79s
+  ✓ client with history is deactivated                                                                           0.69s
+  ✓ t09 health and unauthenticated access                                                                        0.67s
+  ✓ disabled users and historical roles cannot use existing tokens                                               0.80s
+  ✓ seeders are idempotent and preserve existing rows                                                            1.96s
+
+   PASS  Tests\Feature\ExampleTest
+  ✓ the application returns a successful response                                                                0.21s
+
+  Tests:    14 passed (63 assertions)
+  Duration: 14.00s
+
+
+
+Exit: 0

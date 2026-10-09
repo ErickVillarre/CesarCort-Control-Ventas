@@ -1,0 +1,62 @@
+﻿ M README.md
+ M backend/app/Http/Controllers/AuthController.php
+ M backend/app/Http/Controllers/CajaController.php
+ M backend/app/Http/Controllers/EmpleadoController.php
+ M backend/app/Http/Controllers/RoleController.php
+ M backend/app/Http/Controllers/VentaController.php
+ M backend/app/Models/User.php
+ M backend/bootstrap/app.php
+ M backend/config/cors.php
+ M backend/database/seeders/DatabaseSeeder.php
+ M backend/database/seeders/RolesAndDemoUsersSeeder.php
+ M backend/routes/api.php
+ M frontend/src/AdminAccess.jsx
+ M frontend/src/App.jsx
+ M frontend/src/ChangePassword.jsx
+ M frontend/src/Clientes.jsx
+ M frontend/src/Creditos.jsx
+ M frontend/src/Dashboard.jsx
+ M frontend/src/Login.jsx
+ M frontend/src/Productos.jsx
+ M frontend/src/Ventas.jsx
+ M frontend/src/api/axios.js
+ M frontend/vite.config.js
+?? backend/.dockerignore
+?? backend/.env.production.example
+?? backend/Dockerfile
+?? backend/app/Http/Middleware/EnsureActiveAccess.php
+?? backend/app/Services/
+?? backend/config/apf2.php
+?? backend/database/migrations/2026_10_09_000001_prepare_apf2_schema.php
+?? backend/database/seeders/Apf2AccessSeeder.php
+?? backend/database/seeders/Apf2CatalogSeeder.php
+?? backend/database/seeders/Apf2SalesSeeder.php
+?? backend/tests/Feature/Apf2Test.php
+?? docs/
+?? frontend/vercel.json
+?? scripts/
+ README.md                                          | 110 ++++++---------------
+ backend/app/Http/Controllers/AuthController.php    |   4 +-
+ backend/app/Http/Controllers/CajaController.php    |  20 ++--
+ .../app/Http/Controllers/EmpleadoController.php    |   2 +-
+ backend/app/Http/Controllers/RoleController.php    |   2 +-
+ backend/app/Http/Controllers/VentaController.php   |  77 ++++++---------
+ backend/app/Models/User.php                        |   4 +-
+ backend/bootstrap/app.php                          |   1 +
+ backend/config/cors.php                            |   2 +-
+ backend/database/seeders/DatabaseSeeder.php        |   7 +-
+ .../database/seeders/RolesAndDemoUsersSeeder.php   |   2 +-
+ backend/routes/api.php                             |   7 +-
+ frontend/src/AdminAccess.jsx                       |   2 +-
+ frontend/src/App.jsx                               |  20 ++--
+ frontend/src/ChangePassword.jsx                    |   2 +-
+ frontend/src/Clientes.jsx                          |   2 +-
+ frontend/src/Creditos.jsx                          |   2 +-
+ frontend/src/Dashboard.jsx                         |  16 +--
+ frontend/src/Login.jsx                             |   9 +-
+ frontend/src/Productos.jsx                         |   2 +-
+ frontend/src/Ventas.jsx                            |  25 +++--
+ frontend/src/api/axios.js                          |  11 ++-
+ frontend/vite.config.js                            |  14 ++-
+ 23 files changed, 151 insertions(+), 192 deletions(-)
+apf2-vercel

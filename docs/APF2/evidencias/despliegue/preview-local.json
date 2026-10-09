@@ -1,0 +1,30 @@
+{
+  "checks": [
+    {
+      "route": "/",
+      "banner": true,
+      "loginDisabled": true,
+      "brokenImages": 0,
+      "ok": true
+    },
+    {
+      "route": "/login",
+      "banner": true,
+      "loginDisabled": true,
+      "brokenImages": 0,
+      "ok": true
+    },
+    {
+      "route": "/ventas",
+      "banner": true,
+      "loginDisabled": true,
+      "brokenImages": 0,
+      "ok": true
+    }
+  ],
+  "httpErrors": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "apiRequests": [],
+  "ok": true
+}

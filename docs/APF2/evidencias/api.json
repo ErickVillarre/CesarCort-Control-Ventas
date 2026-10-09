@@ -1,0 +1,210 @@
+[
+  {
+    "name": "health",
+    "ok": true
+  },
+  {
+    "name": "anonymous 401",
+    "ok": true
+  },
+  {
+    "name": "API login apf2.admin@example.test",
+    "ok": true
+  },
+  {
+    "name": "/auth/me admin",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/dashboard admin",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/productos admin",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/clientes admin",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/creditos admin",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/ventas/historial admin",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "roles restriction admin",
+    "ok": true
+  },
+  {
+    "name": "employees restriction admin",
+    "ok": true
+  },
+  {
+    "name": "logout",
+    "ok": true
+  },
+  {
+    "name": "revoked token 401",
+    "ok": true
+  },
+  {
+    "name": "API login apf2.gerente@example.test",
+    "ok": true
+  },
+  {
+    "name": "/auth/me gerente",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/dashboard gerente",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/productos gerente",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/clientes gerente",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/creditos gerente",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/ventas/historial gerente",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "roles restriction gerente",
+    "ok": true
+  },
+  {
+    "name": "employees restriction gerente",
+    "ok": true
+  },
+  {
+    "name": "logout",
+    "ok": true
+  },
+  {
+    "name": "revoked token 401",
+    "ok": true
+  },
+  {
+    "name": "API login apf2.vendedor1@example.test",
+    "ok": true
+  },
+  {
+    "name": "/auth/me vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/dashboard vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/productos vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/clientes vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/creditos vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/ventas/historial vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "roles restriction vendedor",
+    "ok": true
+  },
+  {
+    "name": "employees restriction vendedor",
+    "ok": true
+  },
+  {
+    "name": "logout",
+    "ok": true
+  },
+  {
+    "name": "revoked token 401",
+    "ok": true
+  },
+  {
+    "name": "API login apf2.vendedor2@example.test",
+    "ok": true
+  },
+  {
+    "name": "/auth/me vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/dashboard vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/productos vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/clientes vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/creditos vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "/ventas/historial vendedor",
+    "ok": true,
+    "status": 200
+  },
+  {
+    "name": "roles restriction vendedor",
+    "ok": true
+  },
+  {
+    "name": "employees restriction vendedor",
+    "ok": true
+  },
+  {
+    "name": "logout",
+    "ok": true
+  },
+  {
+    "name": "revoked token 401",
+    "ok": true
+  }
+]

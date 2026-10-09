@@ -1,0 +1,126 @@
+{
+  "checks": [
+    {
+      "name": "health",
+      "ok": true
+    },
+    {
+      "name": "anonymous 401",
+      "ok": true
+    },
+    {
+      "name": "Browser login apf2.admin@example.test",
+      "ok": true
+    },
+    {
+      "name": "Session storage apf2.admin@example.test",
+      "ok": true
+    },
+    {
+      "name": "Reload persistence apf2.admin@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Productos apf2.admin@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Clientes apf2.admin@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Creditos apf2.admin@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Ventas apf2.admin@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser logout apf2.admin@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser login apf2.gerente@example.test",
+      "ok": true
+    },
+    {
+      "name": "Session storage apf2.gerente@example.test",
+      "ok": true
+    },
+    {
+      "name": "Reload persistence apf2.gerente@example.test",
+      "ok": true
+    },
+    {
+      "name": "Admin menu hidden apf2.gerente@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Productos apf2.gerente@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Clientes apf2.gerente@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Creditos apf2.gerente@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Ventas apf2.gerente@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser logout apf2.gerente@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser login apf2.vendedor1@example.test",
+      "ok": true
+    },
+    {
+      "name": "Session storage apf2.vendedor1@example.test",
+      "ok": true
+    },
+    {
+      "name": "Reload persistence apf2.vendedor1@example.test",
+      "ok": true
+    },
+    {
+      "name": "Admin menu hidden apf2.vendedor1@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Productos apf2.vendedor1@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Clientes apf2.vendedor1@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Creditos apf2.vendedor1@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser module Ventas apf2.vendedor1@example.test",
+      "ok": true
+    },
+    {
+      "name": "Browser logout apf2.vendedor1@example.test",
+      "ok": true
+    },
+    {
+      "name": "No page errors",
+      "ok": true
+    },
+    {
+      "name": "No console errors",
+      "ok": true
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": []
+}

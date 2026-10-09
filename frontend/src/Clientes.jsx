@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useMemo, useState } from "react";
 import api from "./api/axios";
+import { storageUrl } from "./config/deployment";
 import toast from "react-hot-toast";
 import { Pencil, Trash2, Plus, Search, ChevronDown, ChevronUp } from "lucide-react";
 
@@ -92,8 +93,8 @@ export default function Clientes() {
       firma_imagen: null,
     });
 
-    setPreviewDni(cliente.dni_imagen ? `http://127.0.0.1:8000/storage/${cliente.dni_imagen}` : "");
-    setPreviewFirma(cliente.firma_imagen ? `http://127.0.0.1:8000/storage/${cliente.firma_imagen}` : "");
+    setPreviewDni(cliente.dni_imagen ? storageUrl(cliente.dni_imagen) : "");
+    setPreviewFirma(cliente.firma_imagen ? storageUrl(cliente.firma_imagen) : "");
     setShowModal(true);
   };
 
@@ -239,12 +240,12 @@ export default function Clientes() {
 
                   <div className="mt-4 flex gap-3 flex-wrap">
                     {c.dni_imagen && (
-                      <a className="text-zinc-700 underline" href={`http://127.0.0.1:8000/storage/${c.dni_imagen}`} target="_blank" rel="noreferrer">
+                      <a className="text-zinc-700 underline" href={storageUrl(c.dni_imagen)} target="_blank" rel="noreferrer">
                         Ver DNI
                       </a>
                     )}
                     {c.firma_imagen && (
-                      <a className="text-zinc-700 underline" href={`http://127.0.0.1:8000/storage/${c.firma_imagen}`} target="_blank" rel="noreferrer">
+                      <a className="text-zinc-700 underline" href={storageUrl(c.firma_imagen)} target="_blank" rel="noreferrer">
                         Ver firma
                       </a>
                     )}
