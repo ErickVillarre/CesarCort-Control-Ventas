@@ -20,7 +20,7 @@
 
 ## Pendiente o limitado
 
-- **Despliegue remoto completo APF3:** sin URL HTTPS pública que conecte CRM, API y MySQL. La URL de Vercel del APF2 es histórica. Faltan proveedor/plan autorizado, MySQL y almacenamiento privado remoto, secretos del proveedor, respaldo y migración controlados, pruebas externas y trazabilidad entre deployment, commit y CI. No se adquirió un servicio de pago. [Plan y reversión](despliegue-reversion.md).
+- **Despliegue remoto completo APF3:** sin URL HTTPS pública que conecte CRM, API y MySQL. La URL de Vercel del APF2 es histórica. El propietario eligió una [demo gratuita Vercel + Railway Trial](despliegue-demo-gratuita.md), que puede caducar en 30 días o al agotar US$5 de crédito. Faltan las sesiones de ambas cuentas, MySQL y almacenamiento privado remoto, secretos del proveedor, respaldo y migración controlados, pruebas externas y trazabilidad entre deployment, commit y CI. No se adquirió un servicio de pago. El remoto usará solo datos sintéticos, nunca la copia local del propietario. [Plan y reversión](despliegue-reversion.md).
 - **Dispositivos y ceremonias:** no se probaron físicamente celular o tableta ni una red externa; tampoco se validó audio audible. La Review, retrospectiva, asistentes, aceptación del Product Owner y asignaciones individuales de Sprint 6 no constan y siguen pendientes. La historia de despliegue integral S6-06 permanece abierta. [Sprint 6](sprint-6.md).
 - Los registros de la copia proceden de la base del propietario: no incluir datos personales, contraseñas, tokens ni respaldos en el informe o en el repositorio. Las capturas sintéticas documentadas no acreditan un entorno remoto.
 

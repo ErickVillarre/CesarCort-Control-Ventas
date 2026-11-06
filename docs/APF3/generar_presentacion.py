@@ -311,7 +311,7 @@ txt(s, "p95 local · 0/98 respuestas 5xx · sin concurrencia ni red externa",
 notes(s, "No confundir la meta APF2 p95 ≤2 s con un resultado de producción. El p95 mostrado es local, en 20 lecturas secuenciales por ruta. La muestra de UI incluyó 3 navegaciones por perfil, con móvil emulado.")
 
 # 11
-s = base("Planificación de capacidad", "Medir después de elegir el hosting", 11)
+s = base("Planificación de capacidad", "Medir al activar el hosting elegido", 11)
 items = [
     ("Límites del plan", "CPU, RAM, conexiones MySQL, almacenamiento, suspensión y cuotas."),
     ("Tráfico real", "FCP/LCP/TBT, bytes, p95 y errores desde HTTPS y red móvil."),
@@ -363,12 +363,12 @@ card(s, 0.65, 2.0, 5.76, 3.25, "Disponible ahora",
      "Rama APF3 en GitHub y CI previa aprobada.\nCRM + Laravel + MySQL local funcionales.\nLogin de 3 roles, datos y dashboard comprobados.\nIniciador para exposición en esta PC.",
      BLUE, 20, 17)
 card(s, 6.84, 2.0, 5.76, 3.25, "Falta para URL pública",
-     "Vercel y proveedor PHP/MySQL conectados.\nPlan autorizado y adjuntos persistentes.\nBackup remoto, variables HTTPS y migración.\nPruebas externas de login, venta, stock y accesibilidad.",
+     "Iniciar sesión en Vercel y Railway Trial.\nMySQL y adjuntos persistentes.\nBackup remoto, variables HTTPS y migración.\nPruebas externas de login, venta, stock y accesibilidad.",
      RED, 20, 17)
 rect(s, 0.65, 5.62, 11.95, 0.65, GRAPHITE, None, True)
 txt(s, "URL pública APF3: ninguna. La URL del APF2 es histórica.",
     0.92, 5.73, 11.4, 0.38, 16.5, WHITE, True)
-notes(s, "La consigna define desplegado como frontend, API y BD remotos funcionando. No hay credenciales de proveedor disponibles. No se contrató ningún plan de pago.")
+notes(s, "El propietario eligió Vercel Hobby + Railway Trial para una demo de exposición con datos sintéticos. La prueba puede caducar en 30 días o por crédito. La consigna define desplegado como frontend, API y BD remotos funcionando. Aún faltan las sesiones de proveedor. No se contrató ningún plan de pago.")
 
 # 15
 s = base("Evidencias y guion de demostración", "Entrega integrada", 15)
@@ -387,8 +387,8 @@ for i,(n,h,b) in enumerate(steps):
     txt(s, b, 4.08, y+0.12, 4.34, 0.44, 14.5, MUTED)
 rect(s, 9.12, 1.93, 3.42, 4.13, GRAPHITE, None, True)
 txt(s, "DOCUMENTOS", 9.42, 2.3, 2.84, 0.36, 13.5, COPPER_LIGHT, True)
-txt(s, "documento-integrado.md\nresumen-para-informe.md\npruebas.md\ncapacidad.md\nci.md\nhandoff.md",
-    9.42, 2.95, 2.86, 2.54, 16, WHITE, break_words=True,
+txt(s, "documento-integrado.md\nresumen-para-informe.md\npruebas.md\ncapacidad.md\nci.md\nhandoff.md\ndespliegue-demo-gratuita.md",
+    9.42, 2.95, 2.86, 2.54, 14.5, WHITE, break_words=True,
     valign=MSO_ANCHOR.TOP)
 notes(s, "Los documentos enlazan evidencia JSON, capturas sintéticas y runs de GitHub. No abrir registros de clientes reales durante la presentación pública. La contraseña demo se entrega fuera del PPT.")
 

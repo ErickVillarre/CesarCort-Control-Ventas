@@ -13,7 +13,9 @@ RUN apt-get update \
 
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 COPY docker/apache.conf /etc/apache2/conf-available/laravel.conf
+COPY docker/start-apache.sh /usr/local/bin/start-apache
 RUN a2enconf laravel
+RUN chmod +x /usr/local/bin/start-apache
 
 WORKDIR /var/www/html
 COPY . .
@@ -22,4 +24,4 @@ RUN composer install --no-dev --no-interaction --prefer-dist --no-progress --opt
     && chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 80
-CMD ["apache2-foreground"]
+CMD ["/usr/local/bin/start-apache"]

@@ -24,6 +24,7 @@ Registro técnico del tercer avance de Curso Integrador II. Fecha de apertura: *
 | Seguridad y accesibilidad | [seguridad-accesibilidad.md](seguridad-accesibilidad.md) |
 | Capacidad y rendimiento | [capacidad.md](capacidad.md) |
 | Despliegue y reversión | [despliegue-reversion.md](despliegue-reversion.md) |
+| Ruta gratuita elegida para la exposición | [despliegue-demo-gratuita.md](despliegue-demo-gratuita.md) |
 | Resultados y evidencias de pruebas | [pruebas.md](pruebas.md) |
 | Entrega factual para el informe | `handoff.md`, que se completa al cerrar el trabajo |
 | Narrativa integrada para el informe, sin anexos | [documento-integrado.md](documento-integrado.md) |

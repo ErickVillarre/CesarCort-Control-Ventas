@@ -41,7 +41,7 @@ No consta una reunión de Review ni retrospectiva de Sprint 6 al abrir este docu
 | S6-03 | Seis modos, persistencia y guía por voz verificados instrumentalmente en Chrome headless; captura de escritorio y móvil emulado. | Audio audible, teclado/tacto físico, otros navegadores y contraste integral WCAG. |
 | S6-04 | Seeder optativo e idempotente validado: 12 productos, 5 clientes nombrados, 4 ventas, 1 crédito. SQLite inicial respaldada/restaurada; MySQL original respaldada/restaurada en copia y conservada; demo en MySQL separada probada. | Probar demo y respaldo/restauración en la base del hosting autorizado. |
 | S6-05 | Rama publicada y [GitHub Actions aprobó](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42232344846) frontend, backend e imagen Docker para `14f5a70`; comandos locales pasan (6 tests/61 aserciones, lint/build). | Registrar aceptación del equipo cuando corresponda. |
-| S6-06 | Dockerfile construido en CI y configuración SPA preparada; no hay URL APF3 integral. | Proveedor/plan, MySQL remoto, adjuntos duraderos, despliegue y pruebas externas. |
+| S6-06 | Dockerfile construido en CI, puerto dinámico preparado y configuración SPA lista; no hay URL APF3 integral. El propietario eligió Vercel Hobby + Railway Trial para la exposición. | Iniciar sesión en ambas cuentas, MySQL remoto, adjuntos duraderos, despliegue y pruebas externas. La prueba gratuita puede caducar. |
 | S6-07 | Contraste APF2, cambios, seguridad, pruebas, capacidad local y documento integrado redactados. | Completar handoff con commit final y actas reales de Review/retrospectiva cuando ocurran. |
 
 La Review y la retrospectiva siguen **sin reunión comprobada**. No se asignan asistentes, acuerdos ni aceptación del Product Owner por inferencia.
