@@ -14,6 +14,7 @@ return [
     */
 
     'default' => env('FILESYSTEM_DISK', 'local'),
+    'client_documents_disk' => env('CLIENT_DOCUMENTS_DISK', 'local'),
 
     /*
     |--------------------------------------------------------------------------

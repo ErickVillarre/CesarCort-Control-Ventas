@@ -30,11 +30,13 @@ class ClienteController extends Controller
             return $anterior;
         }
 
-        if ($anterior) {
-            Storage::disk('public')->delete($anterior);
+        $disk = config('filesystems.client_documents_disk', 'local');
+        $nuevo = $request->file($campo)->store("clientes/{$campo}", $disk);
+        if ($nuevo && $anterior && Storage::disk($disk)->exists($anterior)) {
+            Storage::disk($disk)->delete($anterior);
         }
 
-        return $request->file($campo)->store("clientes/{$campo}", 'public');
+        return $nuevo ?: $anterior;
     }
 
     public function index()
@@ -101,6 +103,24 @@ class ClienteController extends Controller
         }
 
         return response()->json($cliente);
+    }
+
+    public function documento(Cliente $cliente, string $campo)
+    {
+        abort_unless(in_array($campo, ['dni_imagen', 'firma_imagen'], true), 404);
+        $ruta = $cliente->{$campo};
+        abort_unless($ruta && str_starts_with($ruta, "clientes/{$campo}/"), 404);
+
+        // Legacy uploads may still exist in public storage. New uploads use the private disk.
+        $privateDisk = config('filesystems.client_documents_disk', 'local');
+        $disk = Storage::disk($privateDisk)->exists($ruta) ? $privateDisk : 'public';
+        abort_unless(Storage::disk($disk)->exists($ruta), 404);
+
+        return Storage::disk($disk)->response($ruta, basename($ruta), [
+            'Cache-Control' => 'private, no-store',
+            'Content-Security-Policy' => "default-src 'none'",
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
 
     public function update(Request $request, $id)

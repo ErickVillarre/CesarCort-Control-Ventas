@@ -8,9 +8,15 @@ class Venta extends Model
 {
     protected $fillable = [
         'cliente_id',
+        'vendedor_id',
+        'caja_apertura_id',
         'subtotal',
         'igv',
+        'descuento',
         'total',
+        'estado',
+        'comprobante_tipo',
+        'referencia_demo',
         'metodo_pago',
         'tipo_operacion',
         'monto_recibido',
@@ -33,5 +39,10 @@ class Venta extends Model
     public function detalles()
     {
         return $this->hasMany(DetalleVenta::class, 'venta_id');
+    }
+
+    public function vendedor()
+    {
+        return $this->belongsTo(User::class, 'vendedor_id');
     }
 }

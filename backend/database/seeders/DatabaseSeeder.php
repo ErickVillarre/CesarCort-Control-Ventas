@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolesAndDemoUsersSeeder::class);
 
-        if (app()->environment('local')) {
-            $this->call(DevelopmentDemoDataSeeder::class);
+        if (app()->environment(['local', 'testing']) && filter_var(env('APF3_DEMO_SEED', false), FILTER_VALIDATE_BOOLEAN)) {
+            $this->call(Apf3DemoSeeder::class);
         }
     }
 }

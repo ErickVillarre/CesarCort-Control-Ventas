@@ -99,9 +99,8 @@ class VentaController extends Controller
         ]);
 
         $cliente = Cliente::findOrFail($data['cliente_id']);
-        $this->validateComprobante($data['comprobante_tipo'], $cliente);
-
         try {
+            $this->validateComprobante($data['comprobante_tipo'], $cliente);
             DB::beginTransaction();
 
             [$itemsParaGuardar, $subtotal] = $this->buildItems($data['productos'], $request);
@@ -114,7 +113,9 @@ class VentaController extends Controller
             $subtotalConDescuento = max(0, round($subtotal - $descuento, 2));
             $igv = round($subtotalConDescuento * 0.18, 2);
             $total = round($subtotalConDescuento + $igv, 2);
-            $canFinalize = $request->boolean('finalizar') && $request->user()->hasPermission('caja.cobrar');
+            $canFinalize = $request->boolean('finalizar')
+                && $request->user()->hasPermission('caja.cobrar')
+                && !in_array($data['metodo_pago'], ['yape', 'transferencia', 'mixto'], true);
             $isEfectivo = $data['metodo_pago'] === 'efectivo';
             $montoRecibido = $isEfectivo ? (float) ($data['monto_recibido'] ?? 0) : 0;
 
@@ -138,7 +139,7 @@ class VentaController extends Controller
             ]);
 
             foreach ($itemsParaGuardar as $item) {
-                if ($canFinalize) {
+                if ($canFinalize && $item['producto']->tipo !== 'servicio') {
                     $item['producto']->decrement('stock', $item['cantidad']);
                 }
 
@@ -160,10 +161,16 @@ class VentaController extends Controller
 
             return response()->json($venta->load(['cliente', 'vendedor', 'detalles.producto']), 201);
         } catch (\Throwable $e) {
-            DB::rollBack();
+            if (DB::transactionLevel() > 0) {
+                DB::rollBack();
+            }
             $code = (int) $e->getCode();
+            if ($code >= 400 && $code <= 499) {
+                return response()->json(['message' => $e->getMessage()], $code);
+            }
 
-            return response()->json(['message' => $e->getMessage()], $code >= 400 ? $code : 500);
+            report($e);
+            return response()->json(['message' => 'No se pudo registrar la venta.'], 500);
         }
     }
 
@@ -268,13 +275,15 @@ class VentaController extends Controller
     {
         $subtotal = 0;
         $itemsParaGuardar = [];
+        $requestedStock = [];
 
         foreach ($productos as $item) {
             $producto = Producto::lockForUpdate()->findOrFail($item['producto_id']);
             $cantidad = (int) $item['cantidad'];
             $precio = (float) $item['precio'];
 
-            if ($producto->stock < $cantidad) {
+            $requestedStock[$producto->id] = ($requestedStock[$producto->id] ?? 0) + $cantidad;
+            if ($producto->tipo !== 'servicio' && $producto->stock < $requestedStock[$producto->id]) {
                 throw new \Exception('Stock insuficiente de ' . $producto->nombre, 422);
             }
 

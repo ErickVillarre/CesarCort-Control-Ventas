@@ -15,12 +15,13 @@ use App\Http\Controllers\MarketingController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\StockAlertaController;
 use App\Http\Controllers\PublicPortalController;
+use App\Http\Controllers\SolicitudController;
 
-Route::post('login', [AuthController::class, 'login']);
-Route::post('landing/solicitudes', [StockAlertaController::class, 'publicStore']);
-Route::post('public/demo-access', [PublicPortalController::class, 'demoAccess']);
-Route::post('public/solicitudes', [PublicPortalController::class, 'storeSolicitud']);
-Route::get('public/solicitudes', [PublicPortalController::class, 'solicitudes'])->middleware('auth:sanctum');
+Route::get('health', fn () => response()->json(['status' => 'ok']));
+Route::post('login', [AuthController::class, 'login'])->middleware('throttle:5,1');
+Route::post('landing/solicitudes', [StockAlertaController::class, 'publicStore'])->middleware('throttle:5,1');
+Route::post('public/solicitudes', [PublicPortalController::class, 'storeSolicitud'])->middleware('throttle:5,1');
+Route::get('public/solicitudes', [PublicPortalController::class, 'solicitudes'])->middleware(['auth:sanctum', 'permission:web_requests.view']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('auth/me', [AuthController::class, 'me']);
@@ -28,6 +29,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('auth/change-password', [AuthController::class, 'changePassword']);
 
     Route::middleware('password.changed')->group(function () {
+        Route::get('solicitudes', [SolicitudController::class, 'index']);
+        Route::post('solicitudes', [SolicitudController::class, 'store']);
+        Route::get('solicitudes/{id}', [SolicitudController::class, 'show']);
+        Route::get('solicitudes/{id}/eventos', [SolicitudController::class, 'eventos']);
+        Route::patch('solicitudes/{id}/asignar', [SolicitudController::class, 'asignar']);
+        Route::patch('solicitudes/{id}/resolver', [SolicitudController::class, 'resolver']);
         Route::get('dashboard', DashboardController::class)->middleware('permission:dashboard.ver');
 
         Route::get('mantenimiento/dashboard', [MantenimientoController::class, 'dashboard'])->middleware('permission:mantenimiento.ver');
@@ -70,6 +77,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('productos/{producto}', [ProductoController::class, 'destroy'])->middleware('permission:productos.desactivar');
 
         Route::get('clientes/buscar', [ClienteController::class, 'buscar'])->middleware('permission:clientes.ver');
+        Route::get('clientes/{cliente}/documentos/{campo}', [ClienteController::class, 'documento'])->middleware('permission:clientes.ver');
         Route::get('clientes/{id}/ventas', [ClienteController::class, 'ventas'])->middleware('permission:clientes.ver');
         Route::get('clientes/{id}/ventas-fecha', [ClienteController::class, 'ventasPorFecha'])->middleware('permission:clientes.ver');
         Route::get('clientes/{id}/ventas-mes', [ClienteController::class, 'ventasPorMes'])->middleware('permission:clientes.ver');

@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class EmpleadoController extends Controller
 {
@@ -54,6 +55,7 @@ class EmpleadoController extends Controller
         $data = $request->validate([
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($empleado->user?->id)],
             'role_id' => ['required', 'exists:roles,id'],
+            'temporary_password' => [Rule::requiredIf(!$empleado->user), 'nullable', 'string', Password::min(12)],
         ]);
 
         $role = Role::findOrFail($data['role_id']);
@@ -88,7 +90,7 @@ class EmpleadoController extends Controller
         ]);
 
         if ($isNew) {
-            $user->password = Hash::make((string) env('DEMO_USER_PASSWORD', 'Temporal123!'));
+            $user->password = Hash::make($data['temporary_password']);
         }
 
         $user->save();

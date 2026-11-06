@@ -8,29 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class PublicPortalController extends Controller
 {
-    public function demoAccess(Request $request)
-    {
-        $data = $request->validate([
-            'usuario' => ['required', 'string'],
-            'password' => ['required', 'string'],
-        ]);
-
-        $expectedUser = (string) config('services.landing_demo.user');
-        $expectedPassword = (string) config('services.landing_demo.password');
-
-        if ($expectedUser === '' || $expectedPassword === '') {
-            return response()->json(['message' => 'Acceso demo no configurado'], 503);
-        }
-
-        if (!hash_equals($expectedUser, $data['usuario']) || !hash_equals($expectedPassword, $data['password'])) {
-            return response()->json(['message' => 'Usuario o contraseña incorrectos'], 401);
-        }
-
-        return response()->json([
-            'redirect_url' => rtrim((string) config('services.landing_demo.crm_login_url'), '/'),
-        ]);
-    }
-
     public function storeSolicitud(Request $request)
     {
         $data = $request->validate([
@@ -76,7 +53,7 @@ class PublicPortalController extends Controller
             'updated_at' => now(),
         ]);
 
-        return response()->json(DB::table('public_solicitudes')->find($solicitudId), 201);
+        return response()->json(['id' => $solicitudId, 'estado' => 'pendiente'], 201);
     }
 
     public function solicitudes(Request $request)
@@ -85,7 +62,7 @@ class PublicPortalController extends Controller
 
         $query = DB::table('public_solicitudes')->latest();
 
-        if (!$user->hasPermission('web_requests.view') && $user->role_name === 'cliente') {
+        if (!$user->hasPermission('web_requests.view')) {
             $query->where('user_id', $user->id);
         }
 

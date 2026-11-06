@@ -35,31 +35,36 @@ class RolesAndDemoUsersSeeder extends Seeder
                 );
             }
 
-            $adminRole = Role::where('name', 'admin')->first();
-            $vendedorRole = Role::where('name', 'vendedor')->first();
-            $demoPassword = (string) env('DEMO_USER_PASSWORD', 'Temporal123!');
+            if (!app()->environment(['local', 'testing']) || !filter_var(env('APF3_DEMO_SEED', false), FILTER_VALIDATE_BOOLEAN)) {
+                return;
+            }
 
-            $adminEmails = ['admin@gmail.com', 'superadmin@gmail.com', 'admin.full@cesarcontrol.local'];
+            $demoPassword = (string) env('DEMO_USER_PASSWORD', '');
+            if (strlen($demoPassword) < 12) {
+                throw new \RuntimeException('DEMO_USER_PASSWORD debe tener al menos 12 caracteres para crear usuarios demo.');
+            }
+
+            $adminRole = Role::where('name', 'admin')->first();
 
             if ($adminRole) {
-                $adminEmployee = Empleado::updateOrCreate(
-                    ['email' => 'admin@gmail.com'],
+                $adminEmployee = Empleado::firstOrCreate(
+                    ['email' => 'admin.demo@cesarcontrol.test'],
                     [
                         'codigo' => 'EMP-ADM-001',
                         'nombre' => 'Administrador',
                         'apellidos' => 'Principal',
                         'cargo' => 'Administrador',
                         'area' => 'Administracion',
-                        'telefono' => '900000000',
+                        'telefono' => null,
                         'activo' => true,
                     ]
                 );
 
-                User::updateOrCreate(
-                    ['email' => 'admin@gmail.com'],
+                User::firstOrCreate(
+                    ['email' => 'admin.demo@cesarcontrol.test'],
                     [
                         'name' => 'Administrador Principal',
-                        'password' => Hash::make('123'),
+                        'password' => Hash::make($demoPassword),
                         'rol' => 'admin',
                         'employee_id' => $adminEmployee->id,
                         'role_id' => $adminRole->id,
@@ -68,26 +73,10 @@ class RolesAndDemoUsersSeeder extends Seeder
                     ]
                 );
 
-                User::whereIn('email', $adminEmails)->update([
-                    'rol' => 'admin',
-                    'role_id' => $adminRole->id,
-                    'is_active' => true,
-                ]);
-
-                User::where('rol', 'admin')
-                    ->whereNotIn('email', $adminEmails)
-                    ->update(['rol' => 'vendedor']);
-
-                User::whereNotIn('email', $adminEmails)
-                    ->where('role_id', $adminRole->id)
-                    ->update([
-                        'rol' => 'vendedor',
-                        'role_id' => $vendedorRole?->id,
-                    ]);
             }
 
             foreach ($this->demoUsers() as $demo) {
-                $empleado = Empleado::updateOrCreate(
+                $empleado = Empleado::firstOrCreate(
                     ['email' => $demo['email']],
                     [
                         'codigo' => $demo['codigo'],
@@ -102,7 +91,7 @@ class RolesAndDemoUsersSeeder extends Seeder
 
                 $role = Role::where('name', $demo['role'])->firstOrFail();
 
-                User::updateOrCreate(
+                User::firstOrCreate(
                     ['email' => $demo['email']],
                     [
                         'name' => trim($demo['nombre'] . ' ' . $demo['apellidos']),
@@ -110,7 +99,7 @@ class RolesAndDemoUsersSeeder extends Seeder
                         'rol' => 'vendedor',
                         'employee_id' => $empleado->id,
                         'role_id' => $role->id,
-                        'must_change_password' => true,
+                        'must_change_password' => false,
                         'is_active' => true,
                     ]
                 );
@@ -143,6 +132,7 @@ class RolesAndDemoUsersSeeder extends Seeder
             'usuarios' => 'Administracion',
             'roles' => 'Administracion',
             'configuracion' => 'Configuracion',
+            'solicitudes' => 'Solicitudes',
         ];
 
         $actions = [
@@ -242,6 +232,7 @@ class RolesAndDemoUsersSeeder extends Seeder
                     'roles.view', 'roles.assign',
                     'mantenimiento.aprobar', 'marketing.ver', 'reportes.ver',
                     'reportes.exportar', 'reports.view', 'web_requests.view', 'web_requests.manage',
+                    'solicitudes.ver', 'solicitudes.crear', 'solicitudes.gestionar',
                 ],
             ],
             'vendedor' => [
@@ -255,6 +246,7 @@ class RolesAndDemoUsersSeeder extends Seeder
                     'crm.ver', 'crm.crear', 'productos.ver', 'inventario.ver',
                     'inventory.view', 'creditos.ver', 'credits.view', 'dinero_cuenta.ver',
                     'stock_alertas.ver', 'stock_alertas.crear',
+                    'solicitudes.ver', 'solicitudes.crear',
                 ],
             ],
             'caja' => [
@@ -316,13 +308,8 @@ class RolesAndDemoUsersSeeder extends Seeder
     private function demoUsers(): array
     {
         return [
-            ['codigo' => 'EMP-001', 'nombre' => 'Ana', 'apellidos' => 'Torres', 'cargo' => 'Gerente', 'area' => 'Gerencia', 'role' => 'gerente', 'email' => 'gerencia@cesarcontrol.local', 'telefono' => '900000001'],
-            ['codigo' => 'EMP-002', 'nombre' => 'Luis', 'apellidos' => 'Mendoza', 'cargo' => 'Asesor de ventas', 'area' => 'Comercial', 'role' => 'vendedor', 'email' => 'ventas@cesarcontrol.local', 'telefono' => '900000002'],
-            ['codigo' => 'EMP-003', 'nombre' => 'Carla', 'apellidos' => 'Rojas', 'cargo' => 'Responsable de caja', 'area' => 'Caja', 'role' => 'caja', 'email' => 'caja@cesarcontrol.local', 'telefono' => '900000003'],
-            ['codigo' => 'EMP-004', 'nombre' => 'Diego', 'apellidos' => 'Salazar', 'cargo' => 'Tecnico de mantenimiento', 'area' => 'Mantenimiento', 'role' => 'mantenimiento', 'email' => 'mantenimiento@cesarcontrol.local', 'telefono' => '900000004'],
-            ['codigo' => 'EMP-005', 'nombre' => 'Rosa', 'apellidos' => 'Fernandez', 'cargo' => 'Recursos Humanos', 'area' => 'Personal', 'role' => 'rrhh', 'email' => 'rrhh@cesarcontrol.local', 'telefono' => '900000005'],
-            ['codigo' => 'EMP-006', 'nombre' => 'Marco', 'apellidos' => 'Castillo', 'cargo' => 'Marketing', 'area' => 'Marketing', 'role' => 'marketing', 'email' => 'marketing@cesarcontrol.local', 'telefono' => '900000006'],
-            ['codigo' => 'EMP-CLI-001', 'nombre' => 'Cliente', 'apellidos' => 'Portal', 'cargo' => 'Cliente', 'area' => 'Portal', 'role' => 'cliente', 'email' => 'cliente@cesarcontrol.local', 'telefono' => '900000007'],
+            ['codigo' => 'EMP-001', 'nombre' => 'Gerencia', 'apellidos' => 'Demo', 'cargo' => 'Gerente', 'area' => 'Gerencia', 'role' => 'gerente', 'email' => 'gerencia.demo@cesarcontrol.test', 'telefono' => null],
+            ['codigo' => 'EMP-002', 'nombre' => 'Ventas', 'apellidos' => 'Demo', 'cargo' => 'Asesor de ventas', 'area' => 'Comercial', 'role' => 'vendedor', 'email' => 'ventas.demo@cesarcontrol.test', 'telefono' => null],
         ];
     }
 }

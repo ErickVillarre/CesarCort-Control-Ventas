@@ -33,7 +33,7 @@ class StockAlertaController extends Controller
 
         $id = DB::table('stock_alertas')->insertGetId($data);
 
-        return response()->json(DB::table('stock_alertas')->find($id), 201);
+        return response()->json(['id' => $id, 'estado' => 'pendiente'], 201);
     }
 
     public function publicStore(Request $request)
@@ -66,6 +66,6 @@ class StockAlertaController extends Controller
             'updated_at' => now(),
         ]);
 
-        return response()->json(DB::table('stock_alertas')->find($id), 201);
+        return response()->json(['id' => $id, 'estado' => 'pendiente'], 201);
     }
 }

@@ -80,6 +80,10 @@ class User extends Authenticatable
 
     public function hasPermission(string $permission): bool
     {
+        if (!$this->is_active) {
+            return false;
+        }
+
         if ($this->role?->name === 'admin' || $this->rol === 'admin') {
             return true;
         }

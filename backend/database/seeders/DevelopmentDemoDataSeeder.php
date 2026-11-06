@@ -18,8 +18,8 @@ class DevelopmentDemoDataSeeder extends Seeder
 {
     public function run(): void
     {
-        if (!app()->environment('local')) {
-            $this->command?->warn('Seeder omitido: solo debe ejecutarse en entorno local.');
+        if (!app()->environment('local') || !filter_var(env('APF3_LEGACY_LARGE_DEMO', false), FILTER_VALIDATE_BOOLEAN)) {
+            $this->command?->warn('Seeder grande heredado deshabilitado; use Apf3DemoSeeder en una base aislada.');
             return;
         }
 
