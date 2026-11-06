@@ -19,7 +19,6 @@ use App\Http\Controllers\SolicitudController;
 
 Route::get('health', fn () => response()->json(['status' => 'ok']));
 Route::post('login', [AuthController::class, 'login'])->middleware('throttle:5,1');
-Route::post('landing/solicitudes', [StockAlertaController::class, 'publicStore'])->middleware('throttle:5,1');
 Route::post('public/solicitudes', [PublicPortalController::class, 'storeSolicitud'])->middleware('throttle:5,1');
 Route::get('public/solicitudes', [PublicPortalController::class, 'solicitudes'])->middleware(['auth:sanctum', 'permission:web_requests.view']);
 

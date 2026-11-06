@@ -16,6 +16,8 @@ Auditoría del **6 de noviembre de 2026**. Se contrastó el informe APF2 `APF2_C
 
 La URL Vercel histórica del APF2 respondió `HTTP 200` a una solicitud `HEAD` el 6/11/2026, según comprobación de esta sesión. Esa respuesta solo verifica que el recurso web respondió; no demuestra login ni API/BD de APF3.
 
+**Actualización posterior:** la fila de MySQL describe el estado al iniciar APF3. Para la exposición se respaldó y restauró en copia la base MySQL original; se creó una base MySQL de demostración separada. El respaldo, los conteos y el smoke se registran en [despliegue-reversion.md](despliegue-reversion.md) y [pruebas.md](pruebas.md).
+
 ### Causa histórica de la regresión de identidad/operaciones
 
 El commit `47cf8e1` contenía `CajaController`, `MarketingController`, `ReporteController`, los middlewares `CheckPermission` y `EnsurePasswordWasChanged`, y los modelos `Role`, `Permission` y `Empleado`. El commit `ddd87c1` (`Revert "Implement role-based CRM ERP modules"`) eliminó esos archivos, confirmado por `git show --stat ddd87c1`. En el commit de partida `67ccc12` reaparecieron rutas y referencias a parte de esa funcionalidad sin todos los archivos de soporte. La observación APF3 es, por tanto, una regresión del árbol versionado; restaurar las piezas compatibles y probarlas es trabajo de integración, no una historia nueva de construcción completa de esos módulos.

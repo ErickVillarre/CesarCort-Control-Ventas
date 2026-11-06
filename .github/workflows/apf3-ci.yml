@@ -26,21 +26,6 @@ jobs:
       - run: npm run lint
       - run: npm run build
 
-  landing:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: landing-page
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: npm
-          cache-dependency-path: landing-page/package-lock.json
-      - run: npm ci
-      - run: npm run build
-
   backend:
     runs-on: ubuntu-latest
     defaults:

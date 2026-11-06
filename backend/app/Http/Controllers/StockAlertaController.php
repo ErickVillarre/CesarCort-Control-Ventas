@@ -36,36 +36,4 @@ class StockAlertaController extends Controller
         return response()->json(['id' => $id, 'estado' => 'pendiente'], 201);
     }
 
-    public function publicStore(Request $request)
-    {
-        $data = $request->validate([
-            'nombre' => ['required', 'string', 'max:120'],
-            'telefono' => ['required', 'string', 'max:40'],
-            'email' => ['nullable', 'email', 'max:160'],
-            'producto' => ['nullable', 'string', 'max:180'],
-            'cantidad_aproximada' => ['nullable', 'integer', 'min:1'],
-            'mensaje' => ['nullable', 'string', 'max:1000'],
-        ]);
-
-        $observacion = collect([
-            'Solicitud desde landing page',
-            'Cliente: ' . $data['nombre'],
-            'Telefono: ' . $data['telefono'],
-            isset($data['email']) ? 'Email: ' . $data['email'] : null,
-            isset($data['producto']) ? 'Producto: ' . $data['producto'] : null,
-            isset($data['mensaje']) ? 'Mensaje: ' . $data['mensaje'] : null,
-        ])->filter()->implode("\n");
-
-        $id = DB::table('stock_alertas')->insertGetId([
-            'producto_id' => null,
-            'tipo' => 'solicitado_cliente',
-            'cantidad_aproximada' => $data['cantidad_aproximada'] ?? 1,
-            'observacion' => $observacion,
-            'estado' => 'pendiente',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        return response()->json(['id' => $id, 'estado' => 'pendiente'], 201);
-    }
 }

@@ -1,5 +1,7 @@
 # APF3 — CesarControl CRM/ERP
 
+**Actualización para exposición:** la landing independiente fue retirada por solicitud del propietario. Este directorio conserva evidencia histórica de la landing y documenta el CRM vigente.
+
 Registro técnico del tercer avance de Curso Integrador II. Fecha de apertura: **6 de noviembre de 2026** (America/Lima). Este directorio contiene hechos comprobados, planes y pendientes diferenciados. El informe académico integrado debe citar las evidencias pertinentes dentro del cuerpo y **no llevar anexos**.
 
 ## Alcance y fuentes

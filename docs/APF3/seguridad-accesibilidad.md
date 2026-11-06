@@ -1,5 +1,7 @@
 # Seguridad y accesibilidad funcional
 
+**Actualización para exposición:** la landing independiente fue retirada. Las pruebas y auditorías de landing de este documento corresponden al corte histórico APF3; el panel de accesibilidad vigente está en el login y las vistas autenticadas del CRM.
+
 ## Seguridad del alcance APF3
 
 | Control | Comprobación requerida | Estado al iniciar |

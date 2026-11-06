@@ -1,5 +1,7 @@
 # Sprint 6 — backlog y seguimiento
 
+**Actualización para exposición:** se retiró la landing independiente y el sistema entra directamente al CRM. La evidencia histórica de landing se conserva en la documentación; el alcance vigente de las historias de interfaz corresponde al CRM.
+
 **Fecha de registro:** 6 de noviembre de 2026 (America/Lima). La duración, la fecha formal de inicio y los responsables individuales deben ser confirmados por el equipo; los nombres de integrantes indicados en el APF2 no constituyen asignaciones nuevas. Estado = evidencia verificable en esta rama, no intención.
 
 **Objetivo propuesto:** dejar un incremento APF3 verificable en una rama exclusiva: solicitudes con control de acceso, accesibilidad funcional, demostración sintética coherente, pruebas y CI, y despliegue integral cuando se disponga de proveedores autorizados.
@@ -37,7 +39,7 @@ No consta una reunión de Review ni retrospectiva de Sprint 6 al abrir este docu
 | --- | --- | --- |
 | S6-01 y S6-02 | API/UI de solicitudes implementadas. Prueba 401/403; gerente aprobó acceso sin cambiar permisos del vendedor. Solicitud de servicio registrada desde CRM con accesibilidad activa. | Aceptación del equipo. |
 | S6-03 | Seis modos, persistencia y guía por voz verificados instrumentalmente en Chrome headless; captura de escritorio y móvil emulado. | Audio audible, teclado/tacto físico, otros navegadores y contraste integral WCAG. |
-| S6-04 | Seeder optativo e idempotente validado: 12 productos, 5 clientes nombrados, 4 ventas, 1 crédito. SQLite inicial respaldada/restaurada; MySQL no tocado. | Probar demo y respaldo/restauración en la base del hosting autorizado. |
+| S6-04 | Seeder optativo e idempotente validado: 12 productos, 5 clientes nombrados, 4 ventas, 1 crédito. SQLite inicial respaldada/restaurada; MySQL original respaldada/restaurada en copia y conservada; demo en MySQL separada probada. | Probar demo y respaldo/restauración en la base del hosting autorizado. |
 | S6-05 | Rama publicada y [GitHub Actions aprobó](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42218612774) frontend, landing y backend para `3874929`; comandos locales pasan (6 tests/61 aserciones, lint/build). | Registrar aceptación del equipo cuando corresponda. |
 | S6-06 | Dockerfile y configuración SPA preparados; no hay URL APF3 integral. | Proveedor/plan, MySQL remoto, adjuntos duraderos, despliegue y pruebas externas. |
 | S6-07 | Contraste APF2, cambios, seguridad, pruebas, capacidad local y documento integrado redactados. | Completar handoff con commit final y actas reales de Review/retrospectiva cuando ocurran. |

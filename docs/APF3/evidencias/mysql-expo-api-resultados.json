@@ -1,0 +1,57 @@
+{
+  "health": 200,
+  "anonymous_products": 401,
+  "admin_login_ms": 440.2,
+  "gerente_login_ms": 400.9,
+  "vendedor_login_ms": 418.5,
+  "counts": {
+    "products": 12,
+    "clients": 6
+  },
+  "access_request": {
+    "create": 201,
+    "seller_resolve": 403,
+    "manager_resolve": 200,
+    "permission_unchanged": true
+  },
+  "sale": {
+    "id": 5,
+    "pending": 201,
+    "charged": 200,
+    "duplicate": 409,
+    "stock_before": 10,
+    "stock_after": 9
+  },
+  "latencies": {
+    "/auth/me": {
+      "count": 20,
+      "median_ms": 214.2,
+      "p95_ms": 237.7,
+      "max_ms": 247.0
+    },
+    "/productos": {
+      "count": 20,
+      "median_ms": 163.1,
+      "p95_ms": 181.8,
+      "max_ms": 203.0
+    },
+    "/clientes": {
+      "count": 20,
+      "median_ms": 174.1,
+      "p95_ms": 187.7,
+      "max_ms": 195.8
+    },
+    "/dashboard": {
+      "count": 20,
+      "median_ms": 206.1,
+      "p95_ms": 243.7,
+      "max_ms": 292.4
+    }
+  },
+  "http": {
+    "total": 98,
+    "server_5xx": 0,
+    "expected_401_403_409": 3
+  },
+  "logout_revokes_token": true
+}
