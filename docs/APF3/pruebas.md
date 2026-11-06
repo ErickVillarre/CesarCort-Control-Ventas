@@ -1,6 +1,6 @@
 # Pruebas y evidencias APF3
 
-**Fecha:** 6 de noviembre de 2026, America/Lima. Código probado en commits locales `17bfdd2` (backend) y `4457ff5` (interfaces). Todas las pruebas de negocio de esta página usaron bases SQLite **nuevas y separadas**. La base MySQL configurada originalmente no respondió y no fue modificada. Las pruebas de navegador se hicieron en Chrome 156 headless con escritorio y móvil emulado; no equivalen a una prueba física ni remota.
+**Fecha:** 6 de noviembre de 2026, America/Lima. Código implementado en `17bfdd2` (backend) y `4457ff5` (interfaces), con CI corregida en `3874929`. Todas las pruebas de negocio de esta página usaron bases SQLite **nuevas y separadas**. La base MySQL configurada originalmente no respondió y no fue modificada. Las pruebas de navegador se hicieron en Chrome 156 headless con escritorio y móvil emulado; no equivalen a una prueba física ni remota.
 
 | Verificación | Resultado comprobado | Evidencia |
 | --- | --- | --- |
@@ -17,6 +17,7 @@
 | Accesibilidad antes del login | Seis modos cambiaron tokens de paleta; alto contraste persistió al recargar; activación y detención de voz `es-PE` registradas mediante spy. | [resultado navegador](evidencias/browser-resultados.json), [seguridad-accesibilidad.md](seguridad-accesibilidad.md) |
 | Operación real con accesibilidad | En CRM local, con deuteranopia y guía por voz activadas, un vendedor inició sesión y registró una solicitud de servicio desde la interfaz. El spy captó acciones y confirmación general; no captó contraseña. En móvil emulado, tritanopia persistió tras recargar una vista autenticada de solicitudes, sin desbordamiento horizontal a 390 px. | [CRM escritorio](evidencias/crm-authenticated-desktop.png), [CRM móvil](evidencias/crm-authenticated-mobile.png) |
 | Landing responsive | Vista normal comprobada a 1366 px y 390 px con CTA y panel de accesibilidad visibles. | [escritorio](evidencias/landing-desktop-normal.png), [móvil](evidencias/landing-mobile-normal.png) |
-| CI remota y despliegue integral | **Pendientes**: GitHub rechazó credenciales en `push --dry-run`; no hay ejecución Actions ni API/MySQL públicos APF3. | [ci.md](ci.md), [despliegue-reversion.md](despliegue-reversion.md) |
+| CI remota | Rama `apf3-integrador-ii` publicada; [GitHub Actions 42218612774](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42218612774) aprobó frontend, landing y backend para `3874929`. La ejecución anterior falló en la prueba del seeder y se corrigió. | [ci.md](ci.md) |
+| Despliegue integral | **Pendiente**: aún no hay API/MySQL públicos APF3 ni pruebas desde red externa y dispositivos físicos. | [despliegue-reversion.md](despliegue-reversion.md) |
 
 Las muestras de navegador y API fueron locales, en la misma computadora. El spy de `speechSynthesis` verifica llamadas y texto, **no** que el audio se oyera. No se probó físicamente celular, tableta, laptop desde otra red ni acceso HTTPS del sistema completo; esas comprobaciones siguen pendientes. Las capturas contienen solo contenido sintético. El informe académico citará evidencias en el cuerpo y no llevará anexos.

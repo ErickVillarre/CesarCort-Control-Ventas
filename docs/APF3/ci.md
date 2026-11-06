@@ -1,6 +1,6 @@
 # Integración continua
 
-Al abrir APF3 no había un workflow versionado en `.github/workflows/` en el commit `67ccc12`. En la rama de trabajo se preparó `.github/workflows/apf3-ci.yml` con jobs separados para CRM, landing y backend; **todavía no hay ejecución remota comprobada**. Los comandos reales declarados por el proyecto son:
+Al abrir APF3 no había un workflow versionado en `.github/workflows/` en el commit `67ccc12`. En la rama APF3 se publicó `.github/workflows/apf3-ci.yml` con jobs separados para CRM, landing y backend. La ejecución remota del commit `3874929` terminó correctamente. Los comandos reales declarados por el proyecto son:
 
 | Componente | Instalación | Validación |
 | --- | --- | --- |
@@ -23,6 +23,7 @@ El workflow preparado usa Node 22 y PHP 8.3 (`mbstring`, `dom`, `fileinfo`, `pdo
 | Ejecución | Commit | Resultado frontend | Resultado landing | Resultado backend | Observación |
 | --- | --- | --- | --- | --- | --- |
 | Validación local, 6/11/2026 | Backend `17bfdd2`, interfaces `4457ff5` | `npm run lint` y `npm run build`: exit 0 | `npm run build`: exit 0 | `php artisan test`: 6 pruebas, 61 aserciones, exit 0 | `npm audit` de ambos y `composer audit --locked`: 0 avisos; `composer validate` válido. |
-| GitHub Actions | Pendiente | Pendiente | Pendiente | Pendiente | `git push --dry-run` rechazado por credenciales GitHub inválidas; no se afirma que CI remota haya corrido. |
+| [GitHub Actions 42218037081](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42218037081), 6/11/2026 | `dfb7b15` | Aprobado | Aprobado | Falló: 1 prueba del seeder, 5 aprobadas | El `.env.example` aportaba `APF3_DEMO_SEED=false` en el entorno del runner; la prueba no aislaba `$_SERVER`. |
+| [GitHub Actions 42218612774](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42218612774), 6/11/2026 | `3874929` | Aprobado | Aprobado | Aprobado | Se aisló y restauró la variable del proceso, `$_ENV` y `$_SERVER` en la prueba. Los tres jobs terminaron con `success`. |
 
 La CI valida código en un runner. No valida una venta desde una red externa ni demuestra que el despliegue remoto corresponda al commit hasta comprobar también el proveedor y la URL pública.
