@@ -15,7 +15,9 @@
 
 Con MySQL de XAMPP ya activo, se respaldó la base original `ventas-melamina` a `D:\ventas-melamina-backups\APF3-2026-11-06\mysql-original-before-expo-20261106-074410.sql`, SHA-256 `5cd0e856d1decbbe6c42bf648c1b5ccbcfd3edad34e42f9d2fa712a686122004`. La restauración aislada reprodujo 43 tablas y los conteos originales. Esos conteos siguieron iguales después de la preparación: 19 migraciones, 18 usuarios, 82 productos, 43 clientes y 250 ventas.
 
-La exposición usa `cesarcontrol_apf3_expo`, una base MySQL nueva con 21 migraciones y datos sintéticos APF3. Laravel escucha en `127.0.0.1:8000` y el CRM en `127.0.0.1:5173`. `iniciar-exposicion.cmd` reinicia esos servicios sin ejecutar migraciones ni seed y abre Chrome incógnito. [Prueba funcional MySQL](evidencias/mysql-expo-api-resultados.json): tres roles iniciaron sesión, 401/403 esperados, venta y stock coherentes, 0/98 errores 5xx. Este entorno es local; no sustituye el despliegue remoto.
+El primer montaje de exposición usó `cesarcontrol_apf3_expo`, una base MySQL nueva con 21 migraciones y datos sintéticos APF3. [Su prueba funcional](evidencias/mysql-expo-api-resultados.json) verificó tres roles, 401/403 esperados, venta y stock coherentes, y 0/98 errores 5xx. Este entorno es local y la base sintética queda disponible como alternativa.
+
+Después de solicitar sus registros originales, se hizo otro respaldo restaurado de `ventas-melamina`: `D:\ventas-melamina-backups\APF3-2026-11-06\mysql-original-before-expo-20261106-080312.sql`, SHA-256 `0a50ba9740c530b60b77e74fda2a3ef7b722a4ab1bf2b51f356f04a7b7d562aa`. La copia persistente `cesarcontrol_datos_expo` recibió las cuatro migraciones pendientes y tres usuarios sintéticos de acceso; conserva 82 productos, 43 clientes y 250 ventas del respaldo. El iniciador apunta ahora a esa copia; Laravel escucha en `127.0.0.1:8000` y el CRM en `127.0.0.1:5173`. [Verificación API/navegador](evidencias/mysql-datos-expo-resultados.json). La base `ventas-melamina` original quedó sin cambios; para sincronizar datos nuevos de ella se requeriría un nuevo respaldo/copia controlada.
 
 ## Puerta antes de producción
 

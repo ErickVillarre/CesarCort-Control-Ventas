@@ -12,9 +12,9 @@ El logo original `frontend/public/logo.png` se conserva. La copia que pertenecí
 
 ## Exposición en esta PC
 
-Haz doble clic en `iniciar-exposicion.cmd`. El iniciador comprueba MySQL de XAMPP, reinicia la API Laravel en `127.0.0.1:8000` con la base separada `cesarcontrol_apf3_expo`, deja el CRM en `127.0.0.1:5173` y abre el login en Chrome incógnito. La base original `ventas-melamina` no se modifica al arrancar. Si falta una dependencia, el iniciador muestra el error y deja registros en `%LOCALAPPDATA%\CesarControl\exposicion\logs`.
+Haz doble clic en `iniciar-exposicion.cmd`. El iniciador comprueba MySQL de XAMPP, reinicia la API Laravel en `127.0.0.1:8000` con `cesarcontrol_datos_expo` (una copia migrada de tu base `ventas-melamina`), deja el CRM en `127.0.0.1:5173` y abre el login en Chrome incógnito. La base original no se modifica al arrancar. Si falta una dependencia, el iniciador muestra el error y deja registros en `%LOCALAPPDATA%\CesarControl\exposicion\logs`.
 
-La URL de exposición es `http://127.0.0.1:5173/login`. Es local a esta PC; no es el despliegue público HTTPS. Los tres usuarios sintéticos son `admin.demo@cesarcontrol.test`, `gerencia.demo@cesarcontrol.test` y `ventas.demo@cesarcontrol.test`; la contraseña de exposición se entrega fuera de Git.
+La URL de exposición es `http://127.0.0.1:5173/login`. Es local a esta PC; no es el despliegue público HTTPS. La copia contiene una foto de los registros de la base original al momento del respaldo; los cambios posteriores no se sincronizan automáticamente y las ventas nuevas del CRM se guardan en la copia. Se añadieron solo tres usuarios sintéticos para acceder: `admin.demo@cesarcontrol.test`, `gerencia.demo@cesarcontrol.test` y `ventas.demo@cesarcontrol.test`; la contraseña de exposición se entrega fuera de Git.
 
 ## Preparación local segura
 

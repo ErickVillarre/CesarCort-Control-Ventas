@@ -1,0 +1,40 @@
+{
+  "fecha_local": "2026-11-06",
+  "base_original": "ventas-melamina",
+  "base_exposicion": "cesarcontrol_datos_expo",
+  "respaldo_sha256": "0a50ba9740c530b60b77e74fda2a3ef7b722a4ab1bf2b51f356f04a7b7d562aa",
+  "restauracion_aislada": {
+    "tablas_iguales": 43,
+    "conteos_originales": {
+      "usuarios": 18,
+      "productos": 82,
+      "clientes": 43,
+      "ventas": 250
+    }
+  },
+  "copia": {
+    "migraciones_apf3_aplicadas": 4,
+    "usuarios_originales": 18,
+    "usuarios_sinteticos_agregados": 3,
+    "productos": 82,
+    "clientes": 43,
+    "ventas": 250
+  },
+  "api_final": {
+    "puerto": 8000,
+    "login_admin": 200,
+    "login_gerente": 200,
+    "login_vendedor": 200,
+    "productos": 200,
+    "clientes": 200,
+    "ventas": 200,
+    "dashboard": 200,
+    "logout_tres_roles": 200
+  },
+  "navegador": {
+    "sesion_anterior_invalida_limpiada": true,
+    "login_admin_visual": true,
+    "panel_principal_visible": true
+  },
+  "base_original_sin_modificaciones": true
+}

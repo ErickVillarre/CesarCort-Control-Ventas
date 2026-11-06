@@ -91,16 +91,11 @@ if (-not (Test-TcpPort 3306)) {
 }
 Write-Host 'MySQL: activo.'
 
-$existingBackend = Get-ProjectListener 8000 $backend
-if ($null -ne $existingBackend) {
-    Write-Host 'Reiniciando Laravel del proyecto con MySQL de exposicion...'
-    Stop-ProjectBackend $existingBackend
-}
 $settings = @{
     DB_CONNECTION = 'mysql'
     DB_HOST = '127.0.0.1'
     DB_PORT = '3306'
-    DB_DATABASE = 'cesarcontrol_apf3_expo'
+    DB_DATABASE = 'cesarcontrol_datos_expo'
     DB_USERNAME = 'root'
     APP_URL = 'http://127.0.0.1:8000'
     APP_DEBUG = 'false'
@@ -113,6 +108,15 @@ foreach ($key in $settings.Keys) {
     [Environment]::SetEnvironmentVariable($key, $settings[$key], 'Process')
 }
 try {
+    & $php (Join-Path $backend 'artisan') migrate:status --no-ansi *> $null
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Laravel no pudo leer las migraciones de la copia MySQL. No se reinicio el servidor actual.'
+    }
+    $existingBackend = Get-ProjectListener 8000 $backend
+    if ($null -ne $existingBackend) {
+        Write-Host 'Reiniciando Laravel del proyecto con la copia MySQL de tus datos...'
+        Stop-ProjectBackend $existingBackend
+    }
     Start-Process -FilePath $php -ArgumentList @('artisan', 'serve', '--host=127.0.0.1', '--port=8000') -WorkingDirectory $backend -WindowStyle Hidden -RedirectStandardOutput (Join-Path $logs 'backend.out.log') -RedirectStandardError (Join-Path $logs 'backend.err.log') | Out-Null
 } finally {
     foreach ($key in $settings.Keys) {
