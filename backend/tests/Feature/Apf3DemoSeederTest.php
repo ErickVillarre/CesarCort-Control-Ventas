@@ -13,12 +13,24 @@ class Apf3DemoSeederTest extends TestCase
 
     public function test_small_synthetic_scenario_is_coherent_and_idempotent(): void
     {
-        $oldFlag = getenv('APF3_DEMO_SEED');
-        $oldPassword = getenv('DEMO_USER_PASSWORD');
-        putenv('APF3_DEMO_SEED=true');
-        putenv('DEMO_USER_PASSWORD=TestOnly-Strong-2026');
-        $_ENV['APF3_DEMO_SEED'] = 'true';
-        $_ENV['DEMO_USER_PASSWORD'] = 'TestOnly-Strong-2026';
+        $demoEnvironment = [
+            'APF3_DEMO_SEED' => 'true',
+            'DEMO_USER_PASSWORD' => 'TestOnly-Strong-2026',
+        ];
+        $previousEnvironment = [];
+
+        foreach ($demoEnvironment as $key => $value) {
+            $previousEnvironment[$key] = [
+                'process' => getenv($key),
+                'env_exists' => array_key_exists($key, $_ENV),
+                'env' => $_ENV[$key] ?? null,
+                'server_exists' => array_key_exists($key, $_SERVER),
+                'server' => $_SERVER[$key] ?? null,
+            ];
+            putenv($key.'='.$value);
+            $_ENV[$key] = $value;
+            $_SERVER[$key] = $value;
+        }
 
         try {
             $this->seed(DatabaseSeeder::class);
@@ -38,9 +50,19 @@ class Apf3DemoSeederTest extends TestCase
             $this->assertEquals(118, DB::table('creditos')->value('saldo_actual'));
             $this->assertEquals(118, DB::table('clientes')->where('codigo_cliente', 'APF3-CLI-03')->value('saldo'));
         } finally {
-            $oldFlag === false ? putenv('APF3_DEMO_SEED') : putenv('APF3_DEMO_SEED='.$oldFlag);
-            $oldPassword === false ? putenv('DEMO_USER_PASSWORD') : putenv('DEMO_USER_PASSWORD='.$oldPassword);
-            unset($_ENV['APF3_DEMO_SEED'], $_ENV['DEMO_USER_PASSWORD']);
+            foreach ($previousEnvironment as $key => $previous) {
+                $previous['process'] === false ? putenv($key) : putenv($key.'='.$previous['process']);
+                if ($previous['env_exists']) {
+                    $_ENV[$key] = $previous['env'];
+                } else {
+                    unset($_ENV[$key]);
+                }
+                if ($previous['server_exists']) {
+                    $_SERVER[$key] = $previous['server'];
+                } else {
+                    unset($_SERVER[$key]);
+                }
+            }
         }
     }
 }
