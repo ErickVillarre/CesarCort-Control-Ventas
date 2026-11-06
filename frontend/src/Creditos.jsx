@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useMemo, useState } from "react";
 import api from "./api/axios";
 import toast from "react-hot-toast";
@@ -24,10 +25,6 @@ export default function Creditos() {
   const [editando, setEditando] = useState(null);
   const [form, setForm] = useState(empty);
 
-  useEffect(() => {
-    cargar();
-  }, []);
-
   const cargar = async () => {
     try {
       const [c, cr] = await Promise.all([api.get("/clientes"), api.get("/creditos")]);
@@ -37,6 +34,10 @@ export default function Creditos() {
       toast.error("No se pudo cargar créditos");
     }
   };
+
+  useEffect(() => {
+    cargar();
+  }, []);
 
   const filtrados = useMemo(() => {
     const q = busqueda.toLowerCase();

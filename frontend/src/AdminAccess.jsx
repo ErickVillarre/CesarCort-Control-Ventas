@@ -26,6 +26,7 @@ export default function AdminAccess() {
   const [form, setForm] = useState(emptyEmployee);
   const [roleByEmployee, setRoleByEmployee] = useState({});
   const [emailByEmployee, setEmailByEmployee] = useState({});
+  const [temporaryPasswordByEmployee, setTemporaryPasswordByEmployee] = useState({});
   const canManageUsers = can("usuarios.gestionar");
   const canManageEmployees = can("empleados.crear") || can("empleados.editar");
 
@@ -96,12 +97,22 @@ export default function AdminAccess() {
   };
 
   const habilitar = async (empleado) => {
+    const payload = {
+      email: emailByEmployee[empleado.id],
+      role_id: roleByEmployee[empleado.id],
+    };
+    if (!empleado.user) {
+      const temporaryPassword = temporaryPasswordByEmployee[empleado.id] || "";
+      if (temporaryPassword.length < 12) {
+        toast.error("La contraseña temporal debe tener al menos 12 caracteres");
+        return;
+      }
+      payload.temporary_password = temporaryPassword;
+    }
     try {
-      await api.post(`/empleados/${empleado.id}/acceso`, {
-        email: emailByEmployee[empleado.id],
-        role_id: roleByEmployee[empleado.id],
-      });
+      await api.post(`/empleados/${empleado.id}/acceso`, payload);
       toast.success("Acceso actualizado");
+      setTemporaryPasswordByEmployee((current) => ({ ...current, [empleado.id]: "" }));
       cargar();
     } catch (error) {
       const firstError = Object.values(error.response?.data?.errors || {})?.flat()?.[0];
@@ -183,8 +194,8 @@ export default function AdminAccess() {
         </section>
       )}
 
-      <section className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
-        <table className="w-full text-sm">
+      <section className="overflow-x-auto rounded-lg border border-zinc-200 bg-white shadow-sm">
+        <table className="w-full min-w-[850px] text-sm">
           <thead className="bg-zinc-100 text-left text-zinc-600">
             <tr>
               <th className="px-4 py-3">Empleado</th>
@@ -203,6 +214,7 @@ export default function AdminAccess() {
                 <td className="px-4 py-3">
                   {canManageUsers ? (
                     <input
+                      aria-label={`Correo de acceso de ${empleado.nombre}`}
                       className="w-56 rounded border border-zinc-300 px-3 py-2"
                       value={emailByEmployee[empleado.id] || ""}
                       onChange={(e) => setEmailByEmployee({ ...emailByEmployee, [empleado.id]: e.target.value })}
@@ -214,6 +226,7 @@ export default function AdminAccess() {
                 <td className="px-4 py-3">
                   {canManageUsers ? (
                     <select
+                      aria-label={`Rol de acceso de ${empleado.nombre}`}
                       className="w-48 rounded border border-zinc-300 px-3 py-2"
                       value={roleByEmployee[empleado.id] || ""}
                       onChange={(e) => setRoleByEmployee({ ...roleByEmployee, [empleado.id]: e.target.value })}
@@ -234,8 +247,11 @@ export default function AdminAccess() {
                 </td>
                 {canManageUsers && (
                   <td className="px-4 py-3">
+                    {!empleado.user && <label className="mb-2 block text-xs font-medium">Contraseña temporal
+                      <input type="password" autoComplete="new-password" minLength={12} className="mt-1 w-56 rounded border border-zinc-300 px-3 py-2" value={temporaryPasswordByEmployee[empleado.id] || ""} onChange={(event) => setTemporaryPasswordByEmployee((current) => ({ ...current, [empleado.id]: event.target.value }))} />
+                    </label>}
                     <div className="flex gap-2">
-                      <button onClick={() => habilitar(empleado)} className="rounded bg-zinc-900 p-2 text-white hover:bg-zinc-700" title="Crear o actualizar acceso">
+                      <button onClick={() => habilitar(empleado)} data-voice="Guardar acceso de usuario" className="rounded bg-zinc-900 p-2 text-white hover:bg-zinc-700" title="Crear o actualizar acceso">
                         <UserPlus size={17} />
                       </button>
                       <button onClick={() => desactivar(empleado)} className="rounded border border-zinc-300 p-2 text-zinc-700 hover:bg-zinc-100" title="Desactivar acceso">

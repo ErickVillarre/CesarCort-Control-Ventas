@@ -33,9 +33,12 @@ import {
   SquareStack,
   Wrench,
 } from "lucide-react";
+import AccessibilityPanel from "./Accessibility";
 
-const apiBase = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
-const crmLoginUrl = import.meta.env.VITE_CRM_LOGIN_URL || "http://127.0.0.1:5173/login";
+const configuredApi = import.meta.env.VITE_API_URL?.replace(/\/+$/, "");
+const apiBase = configuredApi || (import.meta.env.DEV ? "http://127.0.0.1:8000/api" : "");
+const apiConfigured = !!apiBase && (!import.meta.env.PROD || apiBase.startsWith("https://"));
+const crmLoginUrl = import.meta.env.VITE_CRM_LOGIN_URL || (import.meta.env.DEV ? "http://127.0.0.1:5173/login" : "");
 
 const logo = new URL("../assets/logo.png", import.meta.url).href;
 const heroPhoto = new URL("../assets/hero-workshop-photo.png", import.meta.url).href;
@@ -222,13 +225,13 @@ const trustItems = [
 ];
 
 const contact = {
-  phone: import.meta.env.VITE_CESCORT_PHONE || "[Completar teléfono]",
-  whatsapp: import.meta.env.VITE_CESCORT_WHATSAPP || "[Completar WhatsApp]",
-  email: import.meta.env.VITE_CESCORT_EMAIL || "[Completar correo]",
-  address: import.meta.env.VITE_CESCORT_ADDRESS || "[Completar dirección de CESCORT]",
-  schedule: import.meta.env.VITE_CESCORT_SCHEDULE || "Horario de atención configurable",
-  facebook: import.meta.env.VITE_CESCORT_FACEBOOK || "Facebook configurable",
-  instagram: import.meta.env.VITE_CESCORT_INSTAGRAM || "Instagram configurable",
+  phone: import.meta.env.VITE_CESCORT_PHONE || "",
+  whatsapp: import.meta.env.VITE_CESCORT_WHATSAPP || "",
+  email: import.meta.env.VITE_CESCORT_EMAIL || "",
+  address: import.meta.env.VITE_CESCORT_ADDRESS || "",
+  schedule: import.meta.env.VITE_CESCORT_SCHEDULE || "",
+  facebook: import.meta.env.VITE_CESCORT_FACEBOOK || "",
+  instagram: import.meta.env.VITE_CESCORT_INSTAGRAM || "",
 };
 
 const emptyQuote = {
@@ -243,11 +246,6 @@ const emptyQuote = {
   mensaje: "",
 };
 
-const emptyLogin = {
-  usuario: "",
-  password: "",
-};
-
 function formatPrice(value) {
   return typeof value === "number" ? `S/ ${value.toFixed(2)}` : value;
 }
@@ -257,6 +255,7 @@ function uniqueValues(key) {
 }
 
 async function apiRequest(path, body) {
+  if (!apiConfigured) throw new Error("API HTTPS no configurada");
   const response = await fetch(`${apiBase}${path}`, {
     method: "POST",
     headers: {
@@ -287,11 +286,7 @@ export default function App() {
   });
   const [quote, setQuote] = useState(emptyQuote);
   const [quoteStatus, setQuoteStatus] = useState("");
-  const [login, setLogin] = useState(emptyLogin);
-  const [loginStatus, setLoginStatus] = useState("");
-  const [loadingLogin, setLoadingLogin] = useState(false);
   const [loadingQuote, setLoadingQuote] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
 
   const filteredCatalog = useMemo(() => {
@@ -357,26 +352,13 @@ export default function App() {
         ].filter(Boolean).join("\n"),
       });
       setQuote(emptyQuote);
-      setQuoteStatus("Solicitud enviada. El equipo comercial la revisara desde el CRM/ERP.");
+      setQuoteStatus("Solicitud enviada. El equipo comercial la revisará desde el CRM/ERP.");
+      window.dispatchEvent(new CustomEvent("cescort:announce", { detail: { kind: "success" } }));
     } catch {
-      setQuoteStatus("La solicitud quedo preparada. Verifica la conexion con el backend para registrarla.");
+      setQuoteStatus(apiConfigured ? "No se registró la solicitud. Inténtalo de nuevo más tarde." : "El servicio de cotizaciones en línea aún no está disponible.");
+      window.dispatchEvent(new CustomEvent("cescort:announce", { detail: { kind: "error" } }));
     } finally {
       setLoadingQuote(false);
-    }
-  };
-
-  const submitDemoLogin = async (event) => {
-    event.preventDefault();
-    setLoadingLogin(true);
-    setLoginStatus("");
-
-    try {
-      const payload = await apiRequest("/public/demo-access", login);
-      window.location.assign(payload.redirect_url || crmLoginUrl);
-    } catch {
-      setLoginStatus("Usuario o contraseña incorrectos");
-    } finally {
-      setLoadingLogin(false);
     }
   };
 
@@ -398,8 +380,8 @@ export default function App() {
               <Nav.Link href="#proyectos">Proyectos</Nav.Link>
               <Nav.Link href="#nosotros">Nosotros</Nav.Link>
               <Nav.Link href="#contacto">Contacto</Nav.Link>
-              <Button variant="outline-dark" size="sm" onClick={() => setShowLogin(true)}>Iniciar sesión</Button>
-              <Button variant="dark" size="sm" onClick={() => openQuote()}>Solicitar cotización</Button>
+              <Button variant="outline-dark" size="sm" href={crmLoginUrl || undefined} disabled={!crmLoginUrl} data-voice="Abrir acceso al CRM">Ingresar al CRM</Button>
+              <Button variant="dark" size="sm" onClick={() => openQuote()} data-voice="Solicitar cotización">Solicitar cotización</Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -495,6 +477,7 @@ export default function App() {
                   <div className="search-field">
                     <Search size={18} />
                     <Form.Control
+                      aria-label="Buscar productos por nombre, marca o acabado"
                       value={filters.search}
                       onChange={(event) => setFilters({ ...filters, search: event.target.value })}
                       placeholder="Buscar por nombre, marca o acabado"
@@ -509,14 +492,14 @@ export default function App() {
                   ["thickness", "Espesor", uniqueValues("thickness")],
                 ].map(([key, label, options]) => (
                   <Col md={6} xl={key === "thickness" ? 2 : 3} key={key}>
-                    <Form.Select value={filters[key]} onChange={(event) => setFilters({ ...filters, [key]: event.target.value })}>
+                    <Form.Select aria-label={`Filtrar por ${label.toLowerCase()}`} value={filters[key]} onChange={(event) => setFilters({ ...filters, [key]: event.target.value })}>
                       <option value="">{label}</option>
                       {options.map((option) => <option key={option} value={option}>{option}</option>)}
                     </Form.Select>
                   </Col>
                 ))}
                 <Col md={6} xl={3}>
-                  <Form.Select value={filters.price} onChange={(event) => setFilters({ ...filters, price: event.target.value })}>
+                  <Form.Select aria-label="Filtrar por rango de precio" value={filters.price} onChange={(event) => setFilters({ ...filters, price: event.target.value })}>
                     <option value="">Rango de precio</option>
                     <option value="low">Hasta S/ 50</option>
                     <option value="mid">S/ 51 a S/ 250</option>
@@ -650,24 +633,24 @@ export default function App() {
                 <Form className="quote-form" onSubmit={submitQuote}>
                   <Row className="g-3">
                     <Col md={6}>
-                      <Form.Label>Nombre</Form.Label>
-                      <Form.Control required value={quote.nombre} onChange={(e) => setQuote({ ...quote, nombre: e.target.value })} />
+                      <Form.Label htmlFor="quote-name">Nombre</Form.Label>
+                      <Form.Control id="quote-name" required value={quote.nombre} onChange={(e) => setQuote({ ...quote, nombre: e.target.value })} />
                     </Col>
                     <Col md={6}>
-                      <Form.Label>DNI o RUC</Form.Label>
-                      <Form.Control required value={quote.dni_ruc} onChange={(e) => setQuote({ ...quote, dni_ruc: e.target.value })} />
+                      <Form.Label htmlFor="quote-document">DNI o RUC</Form.Label>
+                      <Form.Control id="quote-document" required value={quote.dni_ruc} onChange={(e) => setQuote({ ...quote, dni_ruc: e.target.value })} />
                     </Col>
                     <Col md={6}>
-                      <Form.Label>Correo</Form.Label>
-                      <Form.Control type="email" value={quote.email} onChange={(e) => setQuote({ ...quote, email: e.target.value })} />
+                      <Form.Label htmlFor="quote-email">Correo</Form.Label>
+                      <Form.Control id="quote-email" type="email" value={quote.email} onChange={(e) => setQuote({ ...quote, email: e.target.value })} />
                     </Col>
                     <Col md={6}>
-                      <Form.Label>Teléfono</Form.Label>
-                      <Form.Control required value={quote.telefono} onChange={(e) => setQuote({ ...quote, telefono: e.target.value })} />
+                      <Form.Label htmlFor="quote-phone">Teléfono</Form.Label>
+                      <Form.Control id="quote-phone" required value={quote.telefono} onChange={(e) => setQuote({ ...quote, telefono: e.target.value })} />
                     </Col>
                     <Col md={6}>
-                      <Form.Label>Tipo de proyecto</Form.Label>
-                      <Form.Select value={quote.tipo_proyecto} onChange={(e) => setQuote({ ...quote, tipo_proyecto: e.target.value })}>
+                      <Form.Label htmlFor="quote-project">Tipo de proyecto</Form.Label>
+                      <Form.Select id="quote-project" value={quote.tipo_proyecto} onChange={(e) => setQuote({ ...quote, tipo_proyecto: e.target.value })}>
                         <option value="">Seleccionar</option>
                         {["Cocina", "Closet", "Centro de TV", "Wall panel", "Mueble comercial", "Otro"].map((item) => (
                           <option key={item} value={item}>{item}</option>
@@ -675,30 +658,31 @@ export default function App() {
                       </Form.Select>
                     </Col>
                     <Col md={6}>
-                      <Form.Label>Marca de interes</Form.Label>
-                      <Form.Select value={quote.marca_interes} onChange={(e) => setQuote({ ...quote, marca_interes: e.target.value })}>
+                      <Form.Label htmlFor="quote-brand">Marca de interés</Form.Label>
+                      <Form.Select id="quote-brand" value={quote.marca_interes} onChange={(e) => setQuote({ ...quote, marca_interes: e.target.value })}>
                         <option value="">Seleccionar</option>
                         {brands.map((brand) => <option key={brand.name} value={brand.name}>{brand.name}</option>)}
                         <option value="CESCORT">CESCORT</option>
                       </Form.Select>
                     </Col>
                     <Col md={6}>
-                      <Form.Label>Producto o servicio</Form.Label>
-                      <Form.Control required value={quote.producto_servicio} onChange={(e) => setQuote({ ...quote, producto_servicio: e.target.value })} />
+                      <Form.Label htmlFor="quote-item">Producto o servicio</Form.Label>
+                      <Form.Control id="quote-item" required value={quote.producto_servicio} onChange={(e) => setQuote({ ...quote, producto_servicio: e.target.value })} />
                     </Col>
                     <Col md={6}>
-                      <Form.Label>Medidas aproximadas</Form.Label>
-                      <Form.Control value={quote.medidas} onChange={(e) => setQuote({ ...quote, medidas: e.target.value })} />
+                      <Form.Label htmlFor="quote-measures">Medidas aproximadas</Form.Label>
+                      <Form.Control id="quote-measures" value={quote.medidas} onChange={(e) => setQuote({ ...quote, medidas: e.target.value })} />
                     </Col>
                     <Col xs={12}>
-                      <Form.Label>Mensaje adicional</Form.Label>
-                      <Form.Control as="textarea" rows={4} value={quote.mensaje} onChange={(e) => setQuote({ ...quote, mensaje: e.target.value })} />
+                      <Form.Label htmlFor="quote-message">Mensaje adicional</Form.Label>
+                      <Form.Control id="quote-message" as="textarea" rows={4} value={quote.mensaje} onChange={(e) => setQuote({ ...quote, mensaje: e.target.value })} />
                     </Col>
                   </Row>
-                  <Button type="submit" variant="dark" disabled={loadingQuote} className="mt-4 w-100">
+                  <Button type="submit" variant="dark" disabled={loadingQuote || !apiConfigured} className="mt-4 w-100" data-voice="Enviar solicitud de cotización">
                     {loadingQuote ? "Enviando..." : "Enviar solicitud"}
                   </Button>
-                  {quoteStatus && <p className="form-status">{quoteStatus}</p>}
+                  {!apiConfigured && <p className="form-status" role="status">El servicio de cotizaciones en línea aún no está disponible.</p>}
+                  {quoteStatus && <p className="form-status" role="status">{quoteStatus}</p>}
                 </Form>
               </Col>
             </Row>
@@ -710,11 +694,11 @@ export default function App() {
             <Row className="g-4 align-items-stretch">
               <Col lg={5} className="reveal">
                 <p className="eyebrow">Contacto</p>
-                <h2>Canales configurables para atención comercial.</h2>
+                <h2>Hablemos de tu próximo proyecto.</h2>
                 <div className="map-block">
                   <MapPin size={28} />
                   <strong>Ubicación en Perú</strong>
-                  <span>{contact.address}</span>
+                  <span>{contact.address || "Dirección comercial pendiente de confirmar"}</span>
                 </div>
               </Col>
               <Col lg={7}>
@@ -724,7 +708,7 @@ export default function App() {
                     ["WhatsApp", contact.whatsapp, MessageCircle],
                     ["Correo", contact.email, Mail],
                     ["Horario", contact.schedule, Clock3],
-                  ].map(([label, value, Icon]) => (
+                  ].filter(([, value]) => !!value).map(([label, value, Icon]) => (
                     <Col md={6} key={label}>
                       <div className="contact-card reveal">
                         <Icon size={22} />
@@ -733,6 +717,7 @@ export default function App() {
                       </div>
                     </Col>
                   ))}
+                  {!contact.phone && !contact.whatsapp && !contact.email && !contact.schedule && <Col xs={12}><div className="contact-card reveal"><Mail size={22} /><span>Contacto</span><strong>Canales de atención pendientes de confirmar</strong></div></Col>}
                 </Row>
               </Col>
             </Row>
@@ -770,10 +755,7 @@ export default function App() {
             </Col>
             <Col sm={6} lg={2}>
               <strong>Contacto</strong>
-              <span>{contact.phone}</span>
-              <span>{contact.email}</span>
-              <span>{contact.facebook}</span>
-              <span>{contact.instagram}</span>
+              {[contact.phone, contact.email, contact.facebook, contact.instagram].filter(Boolean).map((value) => <span key={value}>{value}</span>)}
             </Col>
           </Row>
           <div className="footer-bottom">
@@ -783,35 +765,6 @@ export default function App() {
           </div>
         </Container>
       </footer>
-
-      <Modal show={showLogin} onHide={() => setShowLogin(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Acceso al sistema de ventas</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form className="modal-form" onSubmit={submitDemoLogin}>
-            <Form.Label>Usuario</Form.Label>
-            <Form.Control
-              autoComplete="username"
-              required
-              value={login.usuario}
-              onChange={(event) => setLogin({ ...login, usuario: event.target.value })}
-            />
-            <Form.Label>Contraseña</Form.Label>
-            <Form.Control
-              autoComplete="current-password"
-              type="password"
-              required
-              value={login.password}
-              onChange={(event) => setLogin({ ...login, password: event.target.value })}
-            />
-            <Button type="submit" variant="dark" disabled={loadingLogin}>
-              {loadingLogin ? "Verificando..." : "Continuar al login"}
-            </Button>
-            {loginStatus && <p className="modal-status error">{loginStatus}</p>}
-          </Form>
-        </Modal.Body>
-      </Modal>
 
       <Modal show={!!selectedProject} onHide={() => setSelectedProject(null)} centered>
         <Modal.Header closeButton>
@@ -830,6 +783,7 @@ export default function App() {
           </Button>
         </Modal.Body>
       </Modal>
+      <AccessibilityPanel />
     </>
   );
 }

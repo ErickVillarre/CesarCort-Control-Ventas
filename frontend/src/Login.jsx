@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Eye, EyeOff, LockKeyhole, Loader2, Mail } from "lucide-react";
 import api from "./api/axios";
+import { apiConfigError } from "./api/axios";
 import toast from "react-hot-toast";
 
 function Login({ onLogin }) {
@@ -27,14 +28,9 @@ function Login({ onLogin }) {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("remember_session", remember ? "1" : "0");
-      if (user?.email === "admin@gmail.com") {
-        localStorage.setItem("active_module", "ventas");
-        window.history.replaceState({}, "", "/ventas");
-      }
-
       onLogin(user);
     } catch (err) {
-      const msg = err.response?.data?.message || "Credenciales incorrectas";
+      const msg = err.response?.data?.message || err.message || "Credenciales incorrectas";
       setError(msg);
       toast.error(msg);
     } finally {
@@ -50,31 +46,31 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 text-zinc-900 grid lg:grid-cols-[1fr_480px]">
-      <section className="hidden lg:flex bg-zinc-900 text-zinc-100 px-12 py-10 flex-col justify-between">
+    <div className="login-screen min-h-screen bg-zinc-100 text-zinc-900 grid lg:grid-cols-[1fr_480px]">
+      <section className="login-side hidden lg:flex bg-zinc-900 text-zinc-100 px-12 py-10 flex-col justify-between">
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="Logo CesarControl" className="h-14 w-14 object-contain rounded bg-zinc-100 p-1" />
+          <img src="/logo.png" alt="Logo CESCORT" className="login-brand-image h-16 w-16 object-contain p-1" />
           <div>
-            <h1 className="text-2xl font-semibold">CesarControl</h1>
-            <p className="text-sm text-zinc-400">Sistema de Gestion Empresarial</p>
+            <h1 className="text-2xl font-semibold">CESCORT <span className="text-base font-normal">Control</span></h1>
+            <p className="text-sm text-zinc-300">Gestión empresarial</p>
           </div>
         </div>
 
         <div className="max-w-xl">
-          <p className="text-sm uppercase tracking-widest text-zinc-400">Control operativo</p>
+          <p className="text-sm uppercase tracking-widest text-zinc-300">Control operativo</p>
           <h2 className="mt-4 text-5xl font-semibold leading-tight">Ventas, inventario y accesos en un solo panel.</h2>
           <div className="mt-8 grid grid-cols-3 gap-3 text-sm">
             <div className="rounded border border-zinc-700 bg-zinc-800/70 p-4">
-              <p className="text-zinc-400">Estado</p>
-              <p className="mt-1 font-semibold">Seguro</p>
+              <p className="text-zinc-300">Módulo</p>
+              <p className="mt-1 font-semibold">Inventario</p>
             </div>
             <div className="rounded border border-zinc-700 bg-zinc-800/70 p-4">
-              <p className="text-zinc-400">Roles</p>
-              <p className="mt-1 font-semibold">Activos</p>
+              <p className="text-zinc-300">Módulo</p>
+              <p className="mt-1 font-semibold">Ventas</p>
             </div>
             <div className="rounded border border-zinc-700 bg-zinc-800/70 p-4">
-              <p className="text-zinc-400">Datos</p>
-              <p className="mt-1 font-semibold">MySQL</p>
+              <p className="text-zinc-300">Módulo</p>
+              <p className="mt-1 font-semibold">Solicitudes</p>
             </div>
           </div>
         </div>
@@ -82,12 +78,12 @@ function Login({ onLogin }) {
         <p className="text-xs text-zinc-500">Gestion segura para ventas, inventario y operaciones.</p>
       </section>
 
-      <main className="flex items-center justify-center px-5 py-10">
-        <div className="w-full max-w-md rounded-lg border border-zinc-200 bg-zinc-50 shadow-xl">
+      <main className="flex items-center justify-center px-5 py-10 pb-24">
+        <div className="login-panel w-full max-w-md border border-zinc-200 bg-zinc-50 shadow-xl">
           <div className="border-b border-zinc-200 px-7 py-6 text-center">
-            <img src="/logo.png" alt="Logo CesarControl" className="mx-auto h-16 w-16 object-contain" />
-            <h1 className="mt-4 text-2xl font-semibold">CesarControl</h1>
-            <p className="mt-1 text-sm text-zinc-500">Sistema de Gestion Empresarial</p>
+            <img src="/logo.png" alt="Logo CESCORT" className="login-brand-image mx-auto h-24 w-24 object-contain p-1" />
+            <h1 className="mt-4 text-2xl font-semibold">CESCORT <span className="text-base font-normal">Control</span></h1>
+            <p className="mt-1 text-sm text-zinc-600">Ventas, inventario y operaciones</p>
           </div>
 
           <div className="px-7 py-6">
@@ -141,15 +137,16 @@ function Login({ onLogin }) {
               Recordarme
             </label>
 
-            {error && (
-              <div className="mt-4 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-                {error}
+            {(error || apiConfigError) && (
+              <div className="mt-4 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+                <strong>Error: </strong>{error || apiConfigError}
               </div>
             )}
 
             <button
               onClick={login}
-              disabled={loading}
+              data-voice="Iniciar sesión"
+              disabled={loading || !!apiConfigError}
               className="mt-5 flex w-full items-center justify-center gap-2 rounded bg-zinc-900 px-4 py-3 font-semibold text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading && <Loader2 size={18} className="animate-spin" />}

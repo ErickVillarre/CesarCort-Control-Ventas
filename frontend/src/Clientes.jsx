@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useMemo, useState } from "react";
 import api from "./api/axios";
 import toast from "react-hot-toast";
@@ -28,6 +29,22 @@ export default function Clientes() {
   const [form, setForm] = useState(emptyForm);
   const [previewDni, setPreviewDni] = useState("");
   const [previewFirma, setPreviewFirma] = useState("");
+
+  const descargarDocumento = async (clienteId, campo) => {
+    try {
+      const response = await api.get(`/clientes/${clienteId}/documentos/${campo}`, { responseType: "blob" });
+      const url = URL.createObjectURL(response.data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `cliente-${clienteId}-${campo}`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch {
+      toast.error("No se pudo descargar el documento. Comprueba tus permisos.");
+    }
+  };
 
   const cargar = async () => {
     try {
@@ -81,8 +98,8 @@ export default function Clientes() {
       firma_imagen: null,
     });
 
-    setPreviewDni(cliente.dni_imagen ? `http://127.0.0.1:8000/storage/${cliente.dni_imagen}` : "");
-    setPreviewFirma(cliente.firma_imagen ? `http://127.0.0.1:8000/storage/${cliente.firma_imagen}` : "");
+    setPreviewDni("");
+    setPreviewFirma("");
     setShowModal(true);
   };
 
@@ -157,6 +174,7 @@ export default function Clientes() {
 
           <button
             onClick={abrirNuevo}
+            data-voice="Crear cliente"
             className="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2"
           >
             <Plus size={18} /> Nuevo cliente
@@ -166,6 +184,7 @@ export default function Clientes() {
         <div className="mt-4 relative">
           <Search className="absolute left-3 top-3 text-gray-400" size={16} />
           <input
+            aria-label="Buscar clientes"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar por nombre, apodo o DNI"
@@ -226,14 +245,14 @@ export default function Clientes() {
 
                   <div className="mt-4 flex gap-3 flex-wrap">
                     {c.dni_imagen && (
-                      <a className="text-blue-600 underline" href={`http://127.0.0.1:8000/storage/${c.dni_imagen}`} target="_blank" rel="noreferrer">
+                      <button type="button" className="text-blue-600 underline" onClick={() => descargarDocumento(c.id, "dni_imagen")}>
                         Ver DNI
-                      </a>
+                      </button>
                     )}
                     {c.firma_imagen && (
-                      <a className="text-blue-600 underline" href={`http://127.0.0.1:8000/storage/${c.firma_imagen}`} target="_blank" rel="noreferrer">
+                      <button type="button" className="text-blue-600 underline" onClick={() => descargarDocumento(c.id, "firma_imagen")}>
                         Ver firma
-                      </a>
+                      </button>
                     )}
                   </div>
 
@@ -348,6 +367,7 @@ export default function Clientes() {
                   onChange={(e) => cambiarArchivo("dni_imagen", e.target.files?.[0])}
                 />
                 {previewDni && <img src={previewDni} alt="dni" className="mt-2 w-40 rounded-lg border" />}
+                {editando?.dni_imagen && !previewDni && <button type="button" className="mt-2 text-blue-600 underline" onClick={() => descargarDocumento(editando.id, "dni_imagen")}>Descargar documento guardado</button>}
               </div>
 
               <div>
@@ -358,6 +378,7 @@ export default function Clientes() {
                   onChange={(e) => cambiarArchivo("firma_imagen", e.target.files?.[0])}
                 />
                 {previewFirma && <img src={previewFirma} alt="firma" className="mt-2 w-40 rounded-lg border" />}
+                {editando?.firma_imagen && !previewFirma && <button type="button" className="mt-2 text-blue-600 underline" onClick={() => descargarDocumento(editando.id, "firma_imagen")}>Descargar documento guardado</button>}
               </div>
             </div>
 
@@ -373,6 +394,7 @@ export default function Clientes() {
               </button>
               <button
                 onClick={guardar}
+                data-voice="Guardar cambios del cliente"
                 className="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg"
               >
                 Guardar

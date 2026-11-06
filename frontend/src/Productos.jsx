@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from "react";
 import api from "./api/axios";
 import toast from "react-hot-toast";
@@ -247,7 +248,7 @@ export default function Productos() {
       setShowDelete(false);
       setProductoEliminar(null);
       obtenerProductos();
-    } catch (error) {
+    } catch {
       toast.error("Solo el administrador puede eliminar");
     }
   };
@@ -283,6 +284,7 @@ export default function Productos() {
 
         <button
           onClick={abrirNuevo}
+          data-voice="Crear producto"
           className="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded"
           title="Nuevo producto"
         >
@@ -290,8 +292,8 @@ export default function Productos() {
         </button>
       </div>
 
-      <div className="bg-white rounded shadow max-h-[500px] overflow-y-auto">
-        <table className="w-full">
+      <div className="bg-white rounded shadow max-h-[500px] overflow-auto">
+        <table className="w-full min-w-[560px]">
           <thead className="bg-gray-100 text-left">
             <tr>
               <th className="p-2">Nombre</th>
@@ -309,7 +311,7 @@ export default function Productos() {
                 <td className="p-2">{p.stock}</td>
                 <td className="p-2 flex gap-2">
                   <button type="button" onClick={() => editar(p)} title="Editar">
-                    <Pencil size={18} color="#eab308" />
+                    <Pencil size={18} color="var(--ui-warning)" />
                   </button>
 
                   <button
@@ -324,7 +326,7 @@ export default function Productos() {
                     }}
                     title="Eliminar"
                   >
-                    <Trash2 size={18} color="red" />
+                    <Trash2 size={18} color="var(--ui-danger)" />
                   </button>
                 </td>
               </tr>
@@ -507,6 +509,7 @@ export default function Productos() {
 
               <button
                 type="submit"
+                data-voice="Guardar producto"
                 className="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded"
               >
                 Guardar

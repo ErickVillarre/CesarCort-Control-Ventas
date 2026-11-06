@@ -313,7 +313,7 @@ export default function Ventas() {
             <div><p className="text-zinc-500">Descuento</p><input type="number" min="0" step="0.01" value={discount} onChange={(e) => setDiscount(e.target.value)} className="mt-1 w-full rounded border border-zinc-300 px-2 py-1" /></div>
             <div><p className="text-zinc-500">Total</p><strong>S/ {total.toFixed(2)}</strong></div>
           </div>
-          <button onClick={submitSale} className="flex items-center justify-center gap-2 rounded bg-zinc-900 px-5 py-3 font-semibold text-white hover:bg-zinc-700">
+          <button onClick={submitSale} data-voice="Registrar venta" className="flex items-center justify-center gap-2 rounded bg-zinc-900 px-5 py-3 font-semibold text-white hover:bg-zinc-700">
             {canCharge ? <CheckCircle size={18} /> : <Send size={18} />}
             {canCharge ? "Finalizar y cobrar" : "Enviar a caja"}
           </button>

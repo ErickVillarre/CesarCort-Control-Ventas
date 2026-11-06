@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from "react";
 import api from "./api/axios";
 import { CalendarDays, ChevronDown, ChevronUp } from "lucide-react";

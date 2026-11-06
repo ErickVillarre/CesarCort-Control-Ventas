@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BadgeDollarSign,
   BarChart3,
@@ -16,11 +16,12 @@ import {
   Package,
   Settings,
   ShoppingCart,
+  ScrollText,
   UserCog,
   Users,
   Wrench,
 } from "lucide-react";
-import api from "./api/axios";
+import api, { apiConfigError } from "./api/axios";
 import Productos from "./Productos";
 import Ventas from "./Ventas";
 import Clientes from "./Clientes";
@@ -32,11 +33,12 @@ import Mantenimiento from "./Mantenimiento";
 import Caja from "./Caja";
 import Marketing from "./Marketing";
 import Reportes from "./Reportes";
+import Solicitudes from "./Solicitudes";
 import toast from "react-hot-toast";
 
 const hasPermission = (user, permission) => {
   const permissions = user?.permissions || [];
-  return permissions.includes("*") || permissions.includes(permission);
+  return !permission || permissions.includes("*") || permissions.includes(permission);
 };
 
 const menuGroups = [
@@ -52,6 +54,7 @@ const menuGroups = [
       { name: "ventas", label: "Ventas", icon: ShoppingCart, permission: "ventas.crear" },
       { name: "clientes", label: "Clientes", icon: Users, permission: "clientes.ver" },
       { name: "historial", label: "Historial", icon: History, permission: "ventas.ver" },
+      { name: "solicitudes", label: "Solicitudes", icon: ScrollText, permission: null },
     ],
   },
   {
@@ -104,6 +107,8 @@ const formatMoney = (value) => `S/ ${Number(value || 0).toFixed(2)}`;
 
 function Dashboard({ setIsAuth, onLogout }) {
   const [open, setOpen] = useState(localStorage.getItem("sidebar_open") === "1");
+  const sidebarRef = useRef(null);
+  const menuButtonRef = useRef(null);
   const [menu, setMenu] = useState(() => {
     const pathModule = window.location.pathname.replace(/^\/+/, "");
     return pathModule || localStorage.getItem("active_module") || "principal";
@@ -131,6 +136,30 @@ function Dashboard({ setIsAuth, onLogout }) {
   }, [open]);
 
   useEffect(() => {
+    if (!open || window.matchMedia("(min-width: 1024px)").matches) return;
+    const sidebar = sidebarRef.current;
+    const menuTrigger = menuButtonRef.current;
+    const controls = [...sidebar.querySelectorAll("button:not([disabled])")];
+    controls[0]?.focus();
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+      if (event.key === "Tab" && controls.length) {
+        const first = controls[0];
+        const last = controls.at(-1);
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      menuTrigger?.focus();
+    };
+  }, [open]);
+
+  useEffect(() => {
     if (!flatMenus.some((item) => item.name === menu) && flatMenus[0]) {
       setMenu(flatMenus[0].name);
     }
@@ -147,12 +176,17 @@ function Dashboard({ setIsAuth, onLogout }) {
     const boot = async () => {
       try {
         const [profile, data] = await Promise.all([api.get("/auth/me"), api.get("/dashboard")]);
-        setUser(profile.data.user);
-        localStorage.setItem("user", JSON.stringify(profile.data.user));
+        const currentUser = profile.data.user || profile.data;
+        setUser(currentUser);
+        localStorage.setItem("user", JSON.stringify(currentUser));
         setDashboard(data.data);
       } catch (error) {
-        if (error.response?.status === 401) {
-          localStorage.clear();
+        if (apiConfigError || error.response?.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          localStorage.removeItem("remember_session");
+          localStorage.removeItem("active_module");
+          window.history.replaceState({}, "", "/login");
           setIsAuth(false);
           return;
         }
@@ -208,6 +242,8 @@ function Dashboard({ setIsAuth, onLogout }) {
         return <Marketing />;
       case "reportes":
         return <Reportes />;
+      case "solicitudes":
+        return <Solicitudes user={user} />;
       case "asistencia":
         return <OperationalModule title="Asistencia" subtitle="Control del personal" icon={ClipboardList} rows={["Empleados activos", "Asistencia", "Observaciones"]} />;
       case "configuracion":
@@ -218,17 +254,18 @@ function Dashboard({ setIsAuth, onLogout }) {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 text-zinc-900 lg:flex">
-      <aside className={`fixed inset-y-0 left-0 z-30 flex flex-col bg-zinc-900 text-zinc-100 shadow-2xl transition-all duration-300 lg:sticky ${open ? "w-72" : "w-20"}`}>
+    <div className="app-shell min-h-screen bg-zinc-100 text-zinc-900 lg:flex">
+      {open && <button type="button" aria-label="Cerrar menú" className="fixed inset-0 z-20 bg-black/40 lg:hidden" onClick={() => setOpen(false)} />}
+      <aside ref={sidebarRef} className={`app-sidebar fixed inset-y-0 left-0 z-30 flex flex-col bg-zinc-900 text-zinc-100 shadow-2xl transition-all duration-300 lg:sticky ${open ? "sidebar-open w-72" : "w-0 lg:w-20"}`}>
         <div className="flex h-20 items-center justify-between border-b border-zinc-800 px-4">
           <div className={`flex items-center gap-3 overflow-hidden ${open ? "opacity-100" : "opacity-0 w-0"}`}>
-            <img src="/logo.png" alt="Logo" className="h-11 w-11 rounded bg-zinc-100 object-contain p-1" />
+            <img src="/logo.png" alt="Logo CESCORT" className="h-11 w-11 rounded bg-zinc-100 object-contain p-1" />
             <div className="min-w-0">
-              <p className="truncate font-semibold">CesarControl</p>
+              <p className="truncate font-semibold">CESCORT <span className="text-xs font-normal">Control</span></p>
               <p className="truncate text-xs text-zinc-400">Gestion empresarial</p>
             </div>
           </div>
-          {!open && <img src="/logo.png" alt="Logo" className="mx-auto h-10 w-10 rounded bg-zinc-100 object-contain p-1" />}
+          {!open && <span aria-label="CESCORT Control" className="sidebar-monogram mx-auto">C</span>}
           <button
             type="button"
             className="rounded p-2 text-zinc-300 hover:bg-zinc-800 hover:text-white"
@@ -251,7 +288,12 @@ function Dashboard({ setIsAuth, onLogout }) {
                   return (
                     <button
                       key={item.name}
-                      onClick={() => setMenu(item.name)}
+                      onClick={() => {
+                        setMenu(item.name);
+                        if (window.matchMedia("(max-width: 1023px)").matches) setOpen(false);
+                      }}
+                      data-voice={`Abrir ${item.label.toLowerCase()}`}
+                      aria-current={active ? "page" : undefined}
                       className={`flex h-11 w-full items-center gap-3 rounded px-3 text-left text-sm transition ${active ? "bg-zinc-100 text-zinc-950 shadow" : "text-zinc-300 hover:bg-zinc-800 hover:text-white"}`}
                       title={item.label}
                     >
@@ -277,11 +319,12 @@ function Dashboard({ setIsAuth, onLogout }) {
         </div>
       </aside>
 
-      <main className="min-h-screen flex-1 pl-20 lg:pl-0">
+      <main className="min-h-screen min-w-0 flex-1 lg:pl-0">
         <header className="sticky top-0 z-20 flex min-h-20 items-center justify-between border-b border-zinc-200 bg-zinc-50/95 px-4 py-4 backdrop-blur md:px-6">
           <div className="flex items-center gap-3">
             <button
               type="button"
+              ref={menuButtonRef}
               className="rounded p-2 text-zinc-600 hover:bg-zinc-200 lg:hidden"
               onClick={() => setOpen((value) => !value)}
               title="Menu"
@@ -290,7 +333,7 @@ function Dashboard({ setIsAuth, onLogout }) {
             </button>
             <div>
               <h1 className="text-xl font-semibold md:text-2xl">{current?.label || "Principal"}</h1>
-              <p className="text-sm text-zinc-500">{today}</p>
+              <p className="text-sm text-zinc-600">{today}</p>
             </div>
           </div>
 
@@ -407,12 +450,12 @@ function DashboardHome({ dashboard, user, today, loading, setMenu }) {
           {(canOpenSales || canOpenClients) && (
             <div className="flex flex-wrap gap-2">
               {canOpenSales && (
-                <button onClick={() => setMenu("ventas")} className="rounded bg-zinc-900 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-700">
+                <button onClick={() => setMenu("ventas")} data-voice="Abrir ventas para registrar una venta" className="rounded bg-zinc-900 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-700">
                   Nueva venta
                 </button>
               )}
               {canOpenClients && (
-                <button onClick={() => setMenu("clientes")} className="rounded border border-zinc-300 px-4 py-2 text-sm font-semibold hover:bg-white">
+                <button onClick={() => setMenu("clientes")} data-voice="Consultar clientes" className="rounded border border-zinc-300 px-4 py-2 text-sm font-semibold hover:bg-white">
                   Clientes
                 </button>
               )}
@@ -426,7 +469,7 @@ function DashboardHome({ dashboard, user, today, loading, setMenu }) {
           <div key={label} className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
             <p className="text-sm text-zinc-500">{label}</p>
             <h3 className="mt-2 text-3xl font-semibold">{value ?? 0}</h3>
-            <p className="mt-1 text-sm text-zinc-400">{caption}</p>
+            <p className="mt-1 text-sm text-zinc-600">{caption}</p>
           </div>
         ))}
       </section>
@@ -437,18 +480,22 @@ function DashboardHome({ dashboard, user, today, loading, setMenu }) {
             <h3 className="font-semibold">Ventas ultimos 7 dias</h3>
             <CalendarDays size={18} className="text-zinc-500" />
           </div>
-          <div className="flex h-56 items-end gap-3">
+          <div className="flex h-56 items-end gap-3 overflow-x-auto" role="img" aria-label="Gráfico de ventas diarias. Los importes se detallan debajo de cada barra.">
             {(dashboard?.chart || []).map((item) => (
               <div key={item.fecha} className="flex h-full flex-1 flex-col justify-end gap-2">
                 <div
-                  className="min-h-2 rounded-t bg-zinc-700 transition hover:bg-zinc-900"
+                  className="chart-bar min-h-2 rounded-t transition"
                   style={{ height: `${Math.max((Number(item.total) / max) * 100, 4)}%` }}
                   title={`${item.fecha}: ${formatMoney(item.total)}`}
                 />
-                <span className="text-center text-[11px] text-zinc-500">{item.fecha.slice(5)}</span>
+                <span className="text-center text-[11px] text-zinc-600">{item.fecha.slice(5)}</span>
               </div>
             ))}
           </div>
+          <details className="mt-4 text-sm">
+            <summary className="cursor-pointer font-medium">Ver datos del gráfico</summary>
+            <div className="mt-2 overflow-x-auto"><table className="w-full text-left"><thead><tr><th scope="col">Fecha</th><th scope="col">Ventas</th></tr></thead><tbody>{(dashboard?.chart || []).map((item) => <tr key={item.fecha}><td>{item.fecha}</td><td>{formatMoney(item.total)}</td></tr>)}</tbody></table></div>
+          </details>
         </div>
 
         <div className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
