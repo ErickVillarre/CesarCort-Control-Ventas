@@ -1,0 +1,22 @@
+# Pruebas y evidencias APF3
+
+**Fecha:** 6 de noviembre de 2026, America/Lima. Código probado en commits locales `17bfdd2` (backend) y `4457ff5` (interfaces). Todas las pruebas de negocio de esta página usaron bases SQLite **nuevas y separadas**. La base MySQL configurada originalmente no respondió y no fue modificada. Las pruebas de navegador se hicieron en Chrome 156 headless con escritorio y móvil emulado; no equivalen a una prueba física ni remota.
+
+| Verificación | Resultado comprobado | Evidencia |
+| --- | --- | --- |
+| Estado inicial local | Rama `feature/backend`, commit `67ccc12`; solo `captura-principal.png` sin seguimiento. Rama `apf3-integrador-ii` creada desde ese commit. Los dos logos PNG ya estaban versionados. | `git status`, `git ls-files`; [captura histórica](../../captura-principal.png) |
+| Respaldo SQLite inicial | Copia y restauración de prueba con SHA-256 idéntico y `PRAGMA quick_check=ok`; base inicial con 3 migraciones y 0 usuarios. | [despliegue-reversion.md](despliegue-reversion.md) |
+| Suite Laravel | `php artisan test`: **6 pruebas, 61 aserciones, 0 fallos**. Incluye roles, 401/403, solicitudes sin concesión de permisos, venta/stock/caja y seeder idempotente. | Salida local del comando y `backend/tests/Feature/` |
+| Composer | `composer validate --no-check-publish` válido; `composer audit --locked`: **0 avisos** tras actualizar el lockfile. | Comandos locales, 6/11/2026 |
+| Frontend | `npm run lint`, `npm run build`, `npm audit --audit-level=high`: exit 0, **0 vulnerabilidades**. | `frontend/package-lock.json` y comandos locales |
+| Landing | `npm run build`, `npm audit --audit-level=high`: exit 0, **0 vulnerabilidades**. | `landing-page/package-lock.json` y comandos locales |
+| Migraciones y demo aislada | 21 migraciones aplicadas a SQLite nueva; seeder APF3: 12 productos, 5 clientes nombrados, 4 ventas (3 cobradas, 1 pendiente), 1 crédito. La consulta API crea además un cliente anónimo auxiliar y devolvió 6. | `php artisan migrate:status`, `Apf3DemoSeederTest` |
+| API de roles y solicitudes | Login admin/gerente/vendedor 200; productos sin token 401; vendedor sin permiso de decisión 403; gerente aprobó una solicitud de acceso y los permisos del vendedor siguieron iguales. | [resultado API](evidencias/api-resultados.json) |
+| Venta y stock | Vendedor creó venta pendiente 201, stock quedó en 10; administrador cobró 200, stock pasó a 9; segundo cobro devolvió 409 y stock siguió en 9. Logout revocó token (401 posterior). | [resultado API](evidencias/api-resultados.json) |
+| Latencia API y errores | 20 lecturas secuenciales por ruta (`auth/me`, productos, clientes, dashboard); medianas 168–217 ms, p95 262–306 ms. De 98 respuestas contabilizadas, **0 fueron 5xx**. | [resultado API](evidencias/api-resultados.json), [capacidad.md](capacidad.md) |
+| Accesibilidad antes del login | Seis modos cambiaron tokens de paleta; alto contraste persistió al recargar; activación y detención de voz `es-PE` registradas mediante spy. | [resultado navegador](evidencias/browser-resultados.json), [seguridad-accesibilidad.md](seguridad-accesibilidad.md) |
+| Operación real con accesibilidad | En CRM local, con deuteranopia y guía por voz activadas, un vendedor inició sesión y registró una solicitud de servicio desde la interfaz. El spy captó acciones y confirmación general; no captó contraseña. En móvil emulado, tritanopia persistió tras recargar una vista autenticada de solicitudes, sin desbordamiento horizontal a 390 px. | [CRM escritorio](evidencias/crm-authenticated-desktop.png), [CRM móvil](evidencias/crm-authenticated-mobile.png) |
+| Landing responsive | Vista normal comprobada a 1366 px y 390 px con CTA y panel de accesibilidad visibles. | [escritorio](evidencias/landing-desktop-normal.png), [móvil](evidencias/landing-mobile-normal.png) |
+| CI remota y despliegue integral | **Pendientes**: GitHub rechazó credenciales en `push --dry-run`; no hay ejecución Actions ni API/MySQL públicos APF3. | [ci.md](ci.md), [despliegue-reversion.md](despliegue-reversion.md) |
+
+Las muestras de navegador y API fueron locales, en la misma computadora. El spy de `speechSynthesis` verifica llamadas y texto, **no** que el audio se oyera. No se probó físicamente celular, tableta, laptop desde otra red ni acceso HTTPS del sistema completo; esas comprobaciones siguen pendientes. Las capturas contienen solo contenido sintético. El informe académico citará evidencias en el cuerpo y no llevará anexos.

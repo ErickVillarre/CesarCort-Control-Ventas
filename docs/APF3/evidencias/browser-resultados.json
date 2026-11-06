@@ -1,0 +1,278 @@
+[
+  {
+    "site": "crm",
+    "profile": "desktop",
+    "viewport": 1366,
+    "scrollWidth": 1366,
+    "dimensions_after_panel": {
+      "body": 1366,
+      "client": 1366,
+      "doc": 1366,
+      "inner": 1366
+    },
+    "load_ms": [
+      137.4,
+      13.3,
+      13.6
+    ],
+    "fcp_ms": [
+      188,
+      36,
+      28
+    ],
+    "palettes": {
+      "normal": [
+        "normal",
+        "#293b33",
+        "#9e3b38",
+        "#176b59"
+      ],
+      "protanopia": [
+        "protanopia",
+        "#214c77",
+        "#713e96",
+        "#155e82"
+      ],
+      "deuteranopia": [
+        "deuteranopia",
+        "#354876",
+        "#924914",
+        "#285d7e"
+      ],
+      "tritanopia": [
+        "tritanopia",
+        "#573f64",
+        "#993b61",
+        "#286449"
+      ],
+      "acromatopsia": [
+        "acromatopsia",
+        "#242424",
+        "#1f1f1f",
+        "#393939"
+      ],
+      "alto-contraste": [
+        "alto-contraste",
+        "#000",
+        "#781b29",
+        "#124e38"
+      ]
+    },
+    "persisted": "alto-contraste",
+    "voice_before": [
+      {
+        "lang": "es-PE",
+        "text": "Guía por voz activada."
+      }
+    ],
+    "voice_stopped": true
+  },
+  {
+    "site": "crm",
+    "profile": "mobile",
+    "viewport": 390,
+    "scrollWidth": 390,
+    "dimensions_after_panel": {
+      "body": 390,
+      "client": 390,
+      "doc": 390,
+      "inner": 390
+    },
+    "load_ms": [
+      128.5,
+      14.3,
+      13
+    ],
+    "fcp_ms": [
+      160,
+      28,
+      28
+    ],
+    "palettes": {
+      "normal": [
+        "normal",
+        "#293b33",
+        "#9e3b38",
+        "#176b59"
+      ],
+      "protanopia": [
+        "protanopia",
+        "#214c77",
+        "#713e96",
+        "#155e82"
+      ],
+      "deuteranopia": [
+        "deuteranopia",
+        "#354876",
+        "#924914",
+        "#285d7e"
+      ],
+      "tritanopia": [
+        "tritanopia",
+        "#573f64",
+        "#993b61",
+        "#286449"
+      ],
+      "acromatopsia": [
+        "acromatopsia",
+        "#242424",
+        "#1f1f1f",
+        "#393939"
+      ],
+      "alto-contraste": [
+        "alto-contraste",
+        "#000",
+        "#781b29",
+        "#124e38"
+      ]
+    },
+    "persisted": "alto-contraste",
+    "voice_before": [
+      {
+        "lang": "es-PE",
+        "text": "Guía por voz activada."
+      }
+    ],
+    "voice_stopped": true
+  },
+  {
+    "site": "landing",
+    "profile": "desktop",
+    "viewport": 1366,
+    "scrollWidth": 1351,
+    "dimensions_after_panel": {
+      "body": 1363,
+      "client": 1351,
+      "doc": 1351,
+      "inner": 1366
+    },
+    "load_ms": [
+      140.8,
+      12.7,
+      12.3
+    ],
+    "fcp_ms": [
+      264,
+      80,
+      76
+    ],
+    "palettes": {
+      "normal": [
+        "normal",
+        "#20201e",
+        "#8b3840",
+        "#27634b"
+      ],
+      "protanopia": [
+        "protanopia",
+        "#193f67",
+        "#713e96",
+        "#185d83"
+      ],
+      "deuteranopia": [
+        "deuteranopia",
+        "#344674",
+        "#924914",
+        "#285d7e"
+      ],
+      "tritanopia": [
+        "tritanopia",
+        "#563d62",
+        "#993b61",
+        "#286449"
+      ],
+      "acromatopsia": [
+        "acromatopsia",
+        "#222",
+        "#1f1f1f",
+        "#393939"
+      ],
+      "alto-contraste": [
+        "alto-contraste",
+        "#000",
+        "#781b29",
+        "#124e38"
+      ]
+    },
+    "persisted": "alto-contraste",
+    "voice_before": [
+      {
+        "lang": "es-PE",
+        "text": "Guía por voz activada."
+      },
+      {
+        "lang": "es-PE",
+        "text": "Solicitar cotización"
+      }
+    ],
+    "voice_stopped": true
+  },
+  {
+    "site": "landing",
+    "profile": "mobile",
+    "viewport": 390,
+    "scrollWidth": 390,
+    "dimensions_after_panel": {
+      "body": 402,
+      "client": 390,
+      "doc": 390,
+      "inner": 390
+    },
+    "load_ms": [
+      140.5,
+      24.8,
+      12.1
+    ],
+    "fcp_ms": [
+      260,
+      80,
+      60
+    ],
+    "palettes": {
+      "normal": [
+        "normal",
+        "#20201e",
+        "#8b3840",
+        "#27634b"
+      ],
+      "protanopia": [
+        "protanopia",
+        "#193f67",
+        "#713e96",
+        "#185d83"
+      ],
+      "deuteranopia": [
+        "deuteranopia",
+        "#344674",
+        "#924914",
+        "#285d7e"
+      ],
+      "tritanopia": [
+        "tritanopia",
+        "#563d62",
+        "#993b61",
+        "#286449"
+      ],
+      "acromatopsia": [
+        "acromatopsia",
+        "#222",
+        "#1f1f1f",
+        "#393939"
+      ],
+      "alto-contraste": [
+        "alto-contraste",
+        "#000",
+        "#781b29",
+        "#124e38"
+      ]
+    },
+    "persisted": "alto-contraste",
+    "voice_before": [
+      {
+        "lang": "es-PE",
+        "text": "Guía por voz activada."
+      }
+    ],
+    "voice_stopped": true
+  }
+]
