@@ -5,7 +5,7 @@ ENV APP_ENV=production \
     APACHE_DOCUMENT_ROOT=/var/www/html/public
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpng-dev libzip-dev libxml2-dev libonig-dev unzip git \
+    && apt-get install -y --no-install-recommends libpng-dev libzip-dev libxml2-dev libonig-dev libsqlite3-dev unzip git \
     && docker-php-ext-install pdo_mysql pdo_sqlite gd zip dom mbstring \
     && a2enmod rewrite headers \
     && sed -ri "s!DocumentRoot /var/www/html!DocumentRoot ${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/sites-available/*.conf \

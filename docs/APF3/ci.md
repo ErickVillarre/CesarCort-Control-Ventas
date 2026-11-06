@@ -27,6 +27,7 @@ El workflow preparado usa Node 22 y PHP 8.3 (`mbstring`, `dom`, `fileinfo`, `pdo
 | [GitHub Actions 42218037081](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42218037081), 6/11/2026 | `dfb7b15` | Aprobado | Aprobado | Falló: 1 prueba del seeder, 5 aprobadas | El `.env.example` aportaba `APF3_DEMO_SEED=false` en el entorno del runner; la prueba no aislaba `$_SERVER`. |
 | [GitHub Actions 42218612774](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42218612774), 6/11/2026 | `3874929` | Aprobado | Aprobado | Aprobado | Se aisló y restauró la variable del proceso, `$_ENV` y `$_SERVER` en la prueba. Los tres jobs terminaron con `success`. |
 | [GitHub Actions 42223705891](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42223705891), 6/11/2026 | `85f4f99` | Aprobado | Ya retirada | Aprobado | Tras quitar landing y conectar la exposición a copia MySQL, ambos jobs vigentes terminaron con `success`. |
+| [GitHub Actions 42232019984](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42232019984), 6/11/2026 | `dc58376` | Aprobado | Ya retirada | Aprobado; imagen Docker falló | El nuevo job detectó que faltaba `libsqlite3-dev` para compilar `pdo_sqlite`. Se registró y corrigió en `backend/Dockerfile`; falta verificar el run del commit corregido. |
 
 La CI valida código en un runner. No valida una venta desde una red externa ni demuestra que el despliegue remoto corresponda al commit hasta comprobar también el proveedor y la URL pública.
 
