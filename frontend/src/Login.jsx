@@ -16,7 +16,7 @@ function Login({ onLogin }) {
     setError("");
 
     if (!email.trim() || !password.trim()) {
-      setError("Completa el usuario y la contrasena.");
+      setError("Completa el usuario y la contraseña.");
       return;
     }
 
@@ -46,44 +46,39 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div className="login-screen min-h-screen bg-zinc-100 text-zinc-900 grid lg:grid-cols-[1fr_480px]">
-      <section className="login-side hidden lg:flex bg-zinc-900 text-zinc-100 px-12 py-10 flex-col justify-between">
-        <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="Logo CESCORT" className="login-brand-image h-16 w-16 object-contain p-1" />
+    <div className="login-screen min-h-screen grid lg:grid-cols-[minmax(0,1.1fr)_minmax(420px,0.9fr)]">
+      <section className="login-side hidden lg:flex flex-col justify-between">
+        <div className="login-wordmark">
+          <span className="login-wordmark-mark" aria-hidden="true">C</span>
           <div>
-            <h1 className="text-2xl font-semibold">CESCORT <span className="text-base font-normal">Control</span></h1>
-            <p className="text-sm text-zinc-300">Gestión empresarial</p>
+            <p className="font-semibold tracking-wide">CESCORT <span className="font-normal">Control</span></p>
+            <p className="text-xs">Gestión empresarial</p>
           </div>
         </div>
 
-        <div className="max-w-xl">
-          <p className="text-sm uppercase tracking-widest text-zinc-300">Control operativo</p>
-          <h2 className="mt-4 text-5xl font-semibold leading-tight">Ventas, inventario y accesos en un solo panel.</h2>
-          <div className="mt-8 grid grid-cols-3 gap-3 text-sm">
-            <div className="rounded border border-zinc-700 bg-zinc-800/70 p-4">
-              <p className="text-zinc-300">Módulo</p>
-              <p className="mt-1 font-semibold">Inventario</p>
-            </div>
-            <div className="rounded border border-zinc-700 bg-zinc-800/70 p-4">
-              <p className="text-zinc-300">Módulo</p>
-              <p className="mt-1 font-semibold">Ventas</p>
-            </div>
-            <div className="rounded border border-zinc-700 bg-zinc-800/70 p-4">
-              <p className="text-zinc-300">Módulo</p>
-              <p className="mt-1 font-semibold">Solicitudes</p>
-            </div>
+        <div className="login-intro">
+          <p className="login-eyebrow">CRM / ERP · MELAMINA</p>
+          <h2>Tu operación, en orden.</h2>
+          <p>Ventas, inventario, clientes y solicitudes en un espacio claro para trabajar mejor.</p>
+          <div className="login-capabilities" aria-label="Áreas del sistema">
+            <span>Ventas</span>
+            <span>Inventario</span>
+            <span>Servicio</span>
           </div>
         </div>
 
-        <p className="text-xs text-zinc-500">Gestion segura para ventas, inventario y operaciones.</p>
+        <p className="login-side-footer">CESCORT · Control para cada decisión.</p>
       </section>
 
-      <main className="flex items-center justify-center px-5 py-10 pb-24">
-        <div className="login-panel w-full max-w-md border border-zinc-200 bg-zinc-50 shadow-xl">
-          <div className="border-b border-zinc-200 px-7 py-6 text-center">
-            <img src="/logo.png" alt="Logo CESCORT" className="login-brand-image mx-auto h-24 w-24 object-contain p-1" />
-            <h1 className="mt-4 text-2xl font-semibold">CESCORT <span className="text-base font-normal">Control</span></h1>
-            <p className="mt-1 text-sm text-zinc-600">Ventas, inventario y operaciones</p>
+      <main className="login-main">
+        <div className="login-panel w-full max-w-md">
+          <div className="login-panel-heading">
+            <img src="/logo.png" alt="Logo CESCORT" className="login-brand-image h-16 w-16 object-contain p-1" />
+            <div>
+              <p className="login-form-eyebrow">ACCESO AL SISTEMA</p>
+              <h1>Bienvenido</h1>
+              <p>Ingresa a tu espacio de trabajo.</p>
+            </div>
           </div>
 
           <div className="px-7 py-6">
@@ -104,7 +99,7 @@ function Login({ onLogin }) {
               </label>
 
               <label className="block">
-                <span className="text-sm font-medium text-zinc-700">Contrasena</span>
+                <span className="text-sm font-medium text-zinc-700">Contraseña</span>
                 <div className="mt-2 flex items-center gap-2 rounded border border-zinc-300 bg-white px-3 focus-within:ring-2 focus-within:ring-zinc-500">
                   <LockKeyhole size={18} className="text-zinc-400" />
                   <input
@@ -119,7 +114,7 @@ function Login({ onLogin }) {
                     type="button"
                     onClick={() => setShowPassword((value) => !value)}
                     className="rounded p-1.5 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
-                    title={showPassword ? "Ocultar contrasena" : "Mostrar contrasena"}
+                    title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
@@ -147,10 +142,10 @@ function Login({ onLogin }) {
               onClick={login}
               data-voice="Iniciar sesión"
               disabled={loading || !!apiConfigError}
-              className="mt-5 flex w-full items-center justify-center gap-2 rounded bg-zinc-900 px-4 py-3 font-semibold text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-70"
+              className="app-primary login-submit mt-5 w-full disabled:cursor-not-allowed"
             >
               {loading && <Loader2 size={18} className="animate-spin" />}
-              Iniciar sesion
+              Iniciar sesión
             </button>
           </div>
         </div>

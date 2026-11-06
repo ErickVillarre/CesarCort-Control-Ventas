@@ -26,3 +26,16 @@
 | Despliegue integral | **Pendiente**: aún no hay API/MySQL públicos APF3 ni pruebas desde red externa y dispositivos físicos. | [despliegue-reversion.md](despliegue-reversion.md) |
 
 Las muestras de navegador y API fueron locales, en la misma computadora. El spy de `speechSynthesis` verifica llamadas y texto, **no** que el audio se oyera. No se probó físicamente celular, tableta, laptop desde otra red ni acceso HTTPS del sistema completo; esas comprobaciones siguen pendientes. Las capturas contienen solo contenido sintético. El informe académico citará evidencias en el cuerpo y no llevará anexos.
+
+## Verificación del rediseño para la exposición
+
+El 6/11/2026 se ejecutaron de nuevo `npm run lint` y `npm run build` del CRM con resultado 0. En Chrome 156 headless se abrió login y dashboard con una base **sintética** temporal en escritorio y móvil emulado; las cuatro vistas se inspeccionaron visualmente y no tuvieron desbordamiento horizontal. La base temporal se detuvo después de las capturas. El CRM de la exposición sigue conectado a `cesarcontrol_datos_expo`.
+
+| Vista | Captura |
+| --- | --- |
+| Login escritorio | [redesign-login-desktop.png](evidencias/redesign-login-desktop.png) |
+| Login móvil emulado | [redesign-login-mobile.png](evidencias/redesign-login-mobile.png) |
+| Dashboard escritorio | [redesign-dashboard-desktop.png](evidencias/redesign-dashboard-desktop.png) |
+| Dashboard móvil emulado | [redesign-dashboard-mobile.png](evidencias/redesign-dashboard-mobile.png) |
+
+Se calcularon 15 pares de texto/fondo semánticos por cada modo del CRM, con mínimos de **5.85:1** normal, **5.92:1** protanopia, **5.56:1** deuteranopia, **5.78:1** tritanopia, **7.62:1** acromatopsia y **8.01:1** alto contraste. [Datos y script reproducible](evidencias/redisenio-contraste.json) (`verificar_contraste.py`). Todos los pares medidos superan 4.5:1; la prueba no cubre cada píxel o estado de interacción. El archivo [Presentacion-APF3-CesarControl.pptx](Presentacion-APF3-CesarControl.pptx) incluye estas capturas y los resultados técnicos.

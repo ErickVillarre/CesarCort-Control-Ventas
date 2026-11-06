@@ -27,6 +27,10 @@ Registro técnico del tercer avance de Curso Integrador II. Fecha de apertura: *
 | Resultados y evidencias de pruebas | [pruebas.md](pruebas.md) |
 | Entrega factual para el informe | `handoff.md`, que se completa al cerrar el trabajo |
 | Narrativa integrada para el informe, sin anexos | [documento-integrado.md](documento-integrado.md) |
+| Hechos resumidos para redactar el informe | [resumen-para-informe.md](resumen-para-informe.md) |
+| Presentación APF3 (15 diapositivas) | [Presentacion-APF3-CesarControl.pptx](Presentacion-APF3-CesarControl.pptx) |
+| Guion para exponer | [guion-presentacion.md](guion-presentacion.md) |
+| Capturas actuales y contraste de la nueva paleta | [evidencias](evidencias/) |
 
 ## Criterio de cierre
 

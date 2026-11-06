@@ -1,0 +1,135 @@
+{
+  "fecha": "2026-11-06",
+  "fuente": "frontend/src/index.css",
+  "metodo": "luminancia relativa sRGB; razón (Lclaro+0.05)/(Loscuro+0.05)",
+  "umbral_texto_normal": 4.5,
+  "alcance": "15 pares semánticos por modo; no cubre imágenes, gradientes, todos los estados ni interacción",
+  "modos": {
+    "normal": {
+      "minimo": 5.85,
+      "cumple_umbral_en_pares_evaluados": true,
+      "pares": {
+        "ink/surface": 15.35,
+        "muted/surface": 6.66,
+        "white/primary": 6.74,
+        "white/primary-hover": 9.23,
+        "white/success": 7.83,
+        "white/danger": 6.85,
+        "white/warning": 7.08,
+        "white/info": 7.83,
+        "sidebar-ink/sidebar": 14.32,
+        "sidebar-muted/sidebar": 9.29,
+        "ink/sidebar-active": 12.33,
+        "success/success-soft": 6.78,
+        "danger/danger-soft": 5.85,
+        "warning/warning-soft": 6.11,
+        "info/page": 7.07
+      }
+    },
+    "protanopia": {
+      "minimo": 5.92,
+      "cumple_umbral_en_pares_evaluados": true,
+      "pares": {
+        "ink/surface": 15.35,
+        "muted/surface": 6.66,
+        "white/primary": 8.2,
+        "white/primary-hover": 11.25,
+        "white/success": 6.84,
+        "white/danger": 7.53,
+        "white/warning": 6.84,
+        "white/info": 8.2,
+        "sidebar-ink/sidebar": 14.32,
+        "sidebar-muted/sidebar": 9.29,
+        "ink/sidebar-active": 13.02,
+        "success/success-soft": 5.92,
+        "danger/danger-soft": 6.44,
+        "warning/warning-soft": 6.1,
+        "info/page": 7.41
+      }
+    },
+    "deuteranopia": {
+      "minimo": 5.56,
+      "cumple_umbral_en_pares_evaluados": true,
+      "pares": {
+        "ink/surface": 15.35,
+        "muted/surface": 6.66,
+        "white/primary": 8.2,
+        "white/primary-hover": 11.36,
+        "white/success": 6.91,
+        "white/danger": 6.26,
+        "white/warning": 7.38,
+        "white/info": 7.62,
+        "sidebar-ink/sidebar": 14.32,
+        "sidebar-muted/sidebar": 9.29,
+        "ink/sidebar-active": 12.98,
+        "success/success-soft": 6.01,
+        "danger/danger-soft": 5.56,
+        "warning/warning-soft": 6.29,
+        "info/page": 6.89
+      }
+    },
+    "tritanopia": {
+      "minimo": 5.78,
+      "cumple_umbral_en_pares_evaluados": true,
+      "pares": {
+        "ink/surface": 15.35,
+        "muted/surface": 6.66,
+        "white/primary": 8.66,
+        "white/primary-hover": 11.68,
+        "white/success": 6.67,
+        "white/danger": 6.78,
+        "white/warning": 7.08,
+        "white/info": 8.66,
+        "sidebar-ink/sidebar": 14.32,
+        "sidebar-muted/sidebar": 9.29,
+        "ink/sidebar-active": 12.77,
+        "success/success-soft": 5.78,
+        "danger/danger-soft": 5.84,
+        "warning/warning-soft": 6.21,
+        "info/page": 7.82
+      }
+    },
+    "acromatopsia": {
+      "minimo": 7.62,
+      "cumple_umbral_en_pares_evaluados": true,
+      "pares": {
+        "ink/surface": 16.86,
+        "muted/surface": 8.32,
+        "white/primary": 15.52,
+        "white/primary-hover": 18.88,
+        "white/success": 12.63,
+        "white/danger": 16.48,
+        "white/warning": 8.45,
+        "white/info": 13.2,
+        "sidebar-ink/sidebar": 14.76,
+        "sidebar-muted/sidebar": 9.58,
+        "ink/sidebar-active": 16.86,
+        "success/success-soft": 10.79,
+        "danger/danger-soft": 12.02,
+        "warning/warning-soft": 7.62,
+        "info/page": 11.79
+      }
+    },
+    "alto-contraste": {
+      "minimo": 8.01,
+      "cumple_umbral_en_pares_evaluados": true,
+      "pares": {
+        "ink/surface": 21.0,
+        "muted/surface": 16.29,
+        "white/primary": 21.0,
+        "white/primary-hover": 15.91,
+        "white/success": 10.67,
+        "white/danger": 10.57,
+        "white/warning": 9.0,
+        "white/info": 10.66,
+        "sidebar-ink/sidebar": 19.48,
+        "sidebar-muted/sidebar": 12.64,
+        "ink/sidebar-active": 21.0,
+        "success/success-soft": 9.27,
+        "danger/danger-soft": 9.0,
+        "warning/warning-soft": 8.01,
+        "info/page": 10.66
+      }
+    }
+  }
+}

@@ -8,6 +8,8 @@ Sistema de ventas de melamina con API Laravel/Sanctum y CRM React/Vite. La landi
 - `frontend/`: CRM/ERP autenticado.
 - `docs/APF3/`: contraste APF2, Sprint 6, seguridad, pruebas, capacidad, despliegue y control de cambios.
 
+Para la sustentación: [presentación APF3](docs/APF3/Presentacion-APF3-CesarControl.pptx), [guion](docs/APF3/guion-presentacion.md), [documento integrado](docs/APF3/documento-integrado.md) y [resumen factual para el informe](docs/APF3/resumen-para-informe.md). El diseño vigente del CRM usa grafito, crema y madera cobriza.
+
 El logo original `frontend/public/logo.png` se conserva. La copia que pertenecía a la landing retirada permanece recuperable en el historial Git. `captura-principal.png` documenta el estado visual local anterior al APF3; no demuestra el funcionamiento actual.
 
 ## Exposición en esta PC

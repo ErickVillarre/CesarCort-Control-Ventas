@@ -58,3 +58,18 @@ Todos esos pares superan 4.5:1. **Alcance limitado:** el cálculo no cubre imág
 | Operación real de CRM con accesibilidad activa | Chrome 156 headless, CRM dev + API/SQLite separadas, escritorio | Vendedor inició sesión con `deuteranopia` y voz activadas, abrió Solicitudes y registró una solicitud de servicio. El spy captó `Iniciar sesión`, `Abrir solicitudes`, `Registrar solicitud` y confirmación genérica; **no** registró contraseña ni texto del formulario. | [captura de operación](evidencias/crm-authenticated-desktop.png); DB sintética separada. |
 
 Una prueba por CLI o spy puede verificar código, llamadas de voz y API, pero no prueba que el usuario haya oído el audio. La prueba con teclado/tacto físico, navegadores sin síntesis y los dispositivos/red externa quedan pendientes hasta que se efectúen realmente. La revisión de contraste calculó pares de tokens; no constituye una auditoría completa WCAG de todas las vistas.
+
+### Paleta actual tras la revisión visual del propietario
+
+La tabla de 11 pares anterior pertenece al primer corte APF3, previo al cambio de colores. La interfaz vigente usa grafito, crema y acento madera, sin verde en los componentes del CRM. El login se simplificó y el dashboard armonizó navegación, tarjetas, tablas y gráficos; el logo PNG original sigue presente. Se evaluaron **15 pares semánticos por modo** de `frontend/src/index.css` mediante el script `verificar_contraste.py`, que guarda [valores y método](evidencias/redisenio-contraste.json):
+
+| Modo actual | Mínimo de 15 pares |
+| --- | ---: |
+| Normal | 5.85:1 |
+| Protanopia | 5.92:1 |
+| Deuteranopia | 5.56:1 |
+| Tritanopia | 5.78:1 |
+| Acromatopsia | 7.62:1 |
+| Alto contraste | 8.01:1 |
+
+Las capturas de [login](evidencias/redesign-login-desktop.png) y [dashboard](evidencias/redesign-dashboard-desktop.png) usan datos sintéticos. Se comprobó visualmente escritorio y móvil emulado, no dispositivos físicos. Estos cálculos no constituyen una declaración de conformidad WCAG 2.2 AA para todo el producto.

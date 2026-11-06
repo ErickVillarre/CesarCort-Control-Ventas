@@ -45,3 +45,5 @@ No consta una reunión de Review ni retrospectiva de Sprint 6 al abrir este docu
 | S6-07 | Contraste APF2, cambios, seguridad, pruebas, capacidad local y documento integrado redactados. | Completar handoff con commit final y actas reales de Review/retrospectiva cuando ocurran. |
 
 La Review y la retrospectiva siguen **sin reunión comprobada**. No se asignan asistentes, acuerdos ni aceptación del Product Owner por inferencia.
+
+**Ajuste visual posterior para la exposición:** el propietario solicitó retirar el verde. El login, navegación y dashboard adoptaron grafito, crema y madera cobriza; lint/build, cuatro capturas sintéticas y contraste calculado de 15 pares por cada modo constan en [pruebas.md](pruebas.md). Es evidencia técnica de S6-03 y S6-07, no una aceptación formal ni una reunión de Review.

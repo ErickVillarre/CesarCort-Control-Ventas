@@ -134,10 +134,10 @@ export default function Caja() {
                 </p>
               </div>
               <div className="flex gap-2">
-                <button onClick={() => validarPago(pago.id, "validado")} className="flex items-center gap-2 rounded bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700">
+                <button onClick={() => validarPago(pago.id, "validado")} className="app-success text-sm">
                   <CheckCircle size={16} /> Validar
                 </button>
-                <button onClick={() => validarPago(pago.id, "rechazado")} className="flex items-center gap-2 rounded bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700">
+                <button onClick={() => validarPago(pago.id, "rechazado")} className="app-danger text-sm">
                   <XCircle size={16} /> Rechazar
                 </button>
               </div>
