@@ -6,8 +6,8 @@
 
 - Carpeta inicial: `D:\ventas-melamina`, rama `feature/backend`, commit `67ccc12`; remoto configurado `https://github.com/ErickVillarre/CesarCort-Control-Ventas.git`. No se hizo `pull`, `reset`, `clean` ni cambio que sobrescribiera la carpeta.
 - Al inicio, `captura-principal.png` era el único archivo sin seguimiento. Fue inspeccionado (login anterior sin datos sensibles visibles) e incorporado como evidencia histórica. `frontend/public/logo.png` y `landing-page/assets/logo.png` ya estaban versionados y eran el mismo blob de 328922 bytes; se conservaron. Los nuevos favicon SVG son derivados gráficos simples para tamaños pequeños. La licencia/titularidad de la foto y logo debe confirmarla el propietario antes de uso comercial.
-- Rama exclusiva de este avance: `apf3-integrador-ii`, creada desde `67ccc12`. Commits locales APF3: `17bfdd2` (backend/datos) y `4457ff5` (interfaces/accesibilidad); commit de documentación por registrar al cierre. No se tocó `main` ni ramas de otros cursos.
-- `git push --dry-run origin apf3-integrador-ii` fue rechazado por credenciales GitHub inválidas. **La rama todavía no se publicó** y no hay SHA remoto ni ejecución de CI comprobada.
+- Rama exclusiva de este avance: `apf3-integrador-ii`, creada desde `67ccc12`. Commits locales principales APF3: `17bfdd2` (backend/datos), `4457ff5` (interfaces/accesibilidad) y `f561b58` (documentación/CI). El SHA exacto de cierre se obtiene con `git rev-parse HEAD` en esta rama. No se tocó `main` ni ramas de otros cursos.
+- `git push --dry-run` fue rechazado por credenciales GitHub inválidas; el intento posterior de `git push -u origin apf3-integrador-ii` tampoco pudo autenticarse. **La rama todavía no se publicó** y no hay SHA remoto ni ejecución de CI comprobada.
 
 ## Implementación y pruebas locales
 
