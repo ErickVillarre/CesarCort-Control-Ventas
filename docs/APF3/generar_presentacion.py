@@ -1,6 +1,6 @@
 """Genera la presentación APF3 desde hechos y capturas sintéticas del repositorio.
 
-Requiere python-pptx. Ejecutar desde cualquier directorio:
+Requiere python-pptx y Pillow. Ejecutar desde cualquier directorio:
     python docs/APF3/generar_presentacion.py
 """
 
@@ -275,23 +275,23 @@ for i, (h,b) in enumerate(steps):
 rect(s, 0.66, 4.93, 11.94, 1.02, BLUE_LIGHT, None, True)
 txt(s, "Producción exige backup restaurable de su propia base y aprobación operativa del entorno.",
     0.93, 5.1, 11.35, 0.63, 17, BLUE, True)
-notes(s, "La bitácora control-cambios.md registra APF3-001 a APF3-009. La aprobación académica y el despliegue público no se infieren del commit.")
+notes(s, "La bitácora control-cambios.md registra APF3-001 a APF3-010. La aprobación académica y el despliegue público no se infieren del commit.")
 
 # 09
 s = base("Integración continua", "GitHub Actions · rama apf3-integrador-ii", 9)
 card(s, 0.65, 2.0, 3.78, 2.68, "Frontend",
-     "Node 22\nnpm ci → lint → build\n\nÚltimo run previo: aprobado.",
+     "Node 22\nnpm ci → lint → build\n\nAprobado en 14f5a70.",
      COPPER, 19, 16.5)
 card(s, 4.74, 2.0, 3.78, 2.68, "Backend",
      "PHP 8.3\ncomposer install → tests\n\n6 pruebas · 61 aserciones.",
      BLUE, 19, 16.5)
 card(s, 8.83, 2.0, 3.78, 2.68, "Imagen Docker",
-     "Build de imagen PHP de producción en un job adicional del workflow APF3.",
+     "Build de imagen PHP de producción aprobado en CI. Ejecución remota pendiente.",
      COPPER, 19, 16.5)
 rect(s, 0.65, 5.1, 11.95, 0.87, RED_LIGHT, None, True)
-txt(s, "Primer run falló en la prueba del seeder; se corrigió el aislamiento de la variable y se volvió a ejecutar.",
+txt(s, "Dos fallos corregidos: prueba del seeder y dependencia SQLite de Docker. Tres jobs actuales aprobados.",
     0.92, 5.25, 11.42, 0.53, 16, RED, True)
-notes(s, "Antes de exponer, reemplazar verbalmente el estado de CI por el run del commit final si ya concluyó. En ci.md están links de runs, incluido el fallo inicial.")
+notes(s, "El run 14f5a70 aprobó frontend, backend e imagen Docker. Verificar también el run del commit final de documentación antes de exponer. En ci.md constan ambos fallos previos.")
 
 # 10
 s = base("Rendimiento: línea base local", "MySQL XAMPP · 20 lecturas secuenciales por ruta", 10)

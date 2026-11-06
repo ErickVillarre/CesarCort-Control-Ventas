@@ -39,3 +39,5 @@ El 6/11/2026 se ejecutaron de nuevo `npm run lint` y `npm run build` del CRM con
 | Dashboard móvil emulado | [redesign-dashboard-mobile.png](evidencias/redesign-dashboard-mobile.png) |
 
 Se calcularon 15 pares de texto/fondo semánticos por cada modo del CRM, con mínimos de **5.85:1** normal, **5.92:1** protanopia, **5.56:1** deuteranopia, **5.78:1** tritanopia, **7.62:1** acromatopsia y **8.01:1** alto contraste. [Datos y script reproducible](evidencias/redisenio-contraste.json) (`verificar_contraste.py`). Todos los pares medidos superan 4.5:1; la prueba no cubre cada píxel o estado de interacción. El archivo [Presentacion-APF3-CesarControl.pptx](Presentacion-APF3-CesarControl.pptx) incluye estas capturas y los resultados técnicos.
+
+**Imagen de producción:** la primera ejecución del job `backend-image` falló por ausencia de `libsqlite3-dev`; el [run corregido `14f5a70`](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42232344846) construyó la imagen Docker y aprobó también frontend y backend. Esto valida el build del contenedor en CI, no su ejecución con MySQL remoto.

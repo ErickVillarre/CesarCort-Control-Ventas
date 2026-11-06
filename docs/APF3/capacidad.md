@@ -40,6 +40,8 @@ La repetición con **MySQL local** dio p95 de 237.7 ms en `GET /api/auth/me`, 18
 
 No se seleccionó un proveedor ni plan de API/MySQL, por lo que CPU, memoria, conexiones, almacenamiento, suspensión, cuotas y precio **no tienen un valor comprobado** para el hosting final. El Dockerfile existe, pero Docker no está instalado en esta PC y la imagen no se construyó aquí. No se contratará capacidad sin autorización del titular.
 
+La imagen PHP sí se construyó posteriormente en el runner de [CI `14f5a70`](https://github.com/ErickVillarre/CesarCort-Control-Ventas/actions/runs/42232344846). Eso comprueba el empaquetado, pero no aporta métricas de recursos ni latencia de un servicio en ejecución.
+
 1. Antes de desplegar, registrar límites reales del plan elegido y asegurar volumen o disco privado duradero para adjuntos, retención de logs y respaldo MySQL restaurable. Si el plan exige pago, pedir aprobación antes de crearlo.
 2. Medir el mismo commit por HTTPS desde escritorio y red móvil externa: al menos tres corridas por perfil, FCP/LCP/TBT, bytes transferidos, login y navegación autenticada. Registrar dispositivo, red, fecha y URL.
 3. Repetir las rutas API con 20 muestras por ruta desde fuera de la computadora y una base demo aislada; anotar p95, 5xx, conexión MySQL y tamaño de datos. Separar 401/403 esperados de errores reales.

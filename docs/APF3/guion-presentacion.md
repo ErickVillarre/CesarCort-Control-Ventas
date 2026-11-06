@@ -12,7 +12,7 @@
 | 6. Diseño | Mostrar login y móvil emulado. La nueva paleta es grafito/crema/madera; seis modos y voz voluntaria. | [Capturas](evidencias/redesign-login-desktop.png), [contraste](evidencias/redisenio-contraste.json) |
 | 7. Datos | Distinguir original, copia de trabajo y demo sintética. El backup se verificó restaurando 43 tablas. | [Resultados MySQL](evidencias/mysql-datos-expo-resultados.json) |
 | 8. Cambios | Cada cambio tiene motivo, impacto, commit, revisión, publicación y posible reversión. | [Bitácora](control-cambios.md) |
-| 9. CI | Enseñar el run aprobado y mencionar que el primer intento falló y fue corregido; el run del commit final debe verificarse antes de exponer. | [CI](ci.md) |
+| 9. CI | Enseñar el run aprobado y mencionar los dos fallos corregidos: prueba del seeder y build Docker. Verificar el run del commit final antes de exponer. | [CI](ci.md) |
 | 10. Rendimiento | p95 de 181.8 a 243.7 ms en API MySQL local, 20 lecturas secuenciales por ruta; 0/98 respuestas 5xx. | [Capacidad](capacidad.md) |
 | 11. Capacidad | Explicar qué límites de hosting y métricas de red real se medirán al publicar. | [Plan](capacidad.md) |
 | 12. Sprint 6 | S6-01 a S6-05 con evidencia local/CI; S6-06 remoto abierto; S6-07 documentado. | [Sprint 6](sprint-6.md) |
